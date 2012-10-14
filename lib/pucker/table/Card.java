@@ -1,4 +1,5 @@
-package ca.ualberta.cs.poker;
+package table;
+
 /***************************************************************************
 Copyright (c) 2000:
       University of Alberta,
@@ -12,15 +13,15 @@ import java.lang.String;
 
 /**
 * Represents a playing card
-* from a set of cards {0..51} which map to cards having a suit 
+* from a set of cards {0..51} which map to cards having a suit
 * {0..3} <==> {CLUBS,DIAMONDS,HEARTS,SPADES}
 * and a face value {0..12} <==> {2..ACE}
-* 
+*
 * @author  Aaron Davidson
 */
 
 /* fully explicit card to integer conversions :
-    
+
 2c =  0    2d = 13    2h = 26    2s = 39
 3c =  1    3d = 14    3h = 27    3s = 40
 4c =  2    4d = 15    4h = 28    4s = 41
@@ -43,7 +44,7 @@ public class Card {
    public final static int DIAMONDS = 1;
    public final static int HEARTS = 2;
    public final static int SPADES = 3;
-   
+
    public final static int BAD_CARD = -1;
    public final static int TWO = 0;
    public final static int THREE = 1;
@@ -58,21 +59,21 @@ public class Card {
    public final static int QUEEN = 10;
    public final static int KING = 11;
    public final static int ACE = 12;
-   
+
    public final static int NUM_SUITS = 4;
    public final static int NUM_RANKS = 13;
    public final static int NUM_CARDS = 52;
-   
+
       private int gIndex;
-   
-   
+
+
       /**
        * Constructor -- makes an empty card.
     */
    public Card() {
       gIndex = -1;
    }
-   
+
    /**
        * Constructor.
        * @param rank face value of the card
@@ -81,7 +82,7 @@ public class Card {
    public Card(int rank, int suit) {
       gIndex = toIndex(rank,suit);
    }
-   
+
    /**
        * Constructor.
     * Creates a Card from an integer index {0..51}
@@ -92,13 +93,13 @@ public class Card {
          gIndex = index;
       else
          gIndex = BAD_CARD;
-   }   
-   
+   }
+
    public Card(String s) {
       if (s.length()==2)
          gIndex = chars2index(s.charAt(0),s.charAt(1));
    }
-   
+
    /**
     * Constructor.
     * Creates a card from its character based representation.
@@ -108,7 +109,7 @@ public class Card {
    public Card(char rank, char suit) {
       gIndex = chars2index(rank,suit);
    }
-   
+
    private int chars2index(char rank, char suit) {
       int r = -1;
       switch (rank) {
@@ -146,8 +147,8 @@ public class Card {
          return toIndex(r,s);
       else return BAD_CARD;
    }
-   
-   
+
+
    /**
     * Return the integer index for this card.
     * @return the card's index value
@@ -155,7 +156,7 @@ public class Card {
    public int getIndex() {
       return gIndex;
    }
-   
+
    /**
        * Change the index of the card.
     * @param index the new index of the card
@@ -163,7 +164,7 @@ public class Card {
    public void setIndex(int index) {
       gIndex = index;
    }
-   
+
    /**
     * convert a rank and a suit to an index
     * @param rank the rank to convert
@@ -173,10 +174,10 @@ public class Card {
    public static int toIndex(int rank, int suit) {
       return (NUM_RANKS*suit) + rank;
    }
-   
-   
+
+
    /**
-       * Change this card to another. This is more practical 
+       * Change this card to another. This is more practical
        * than creating a new object for optimization reasons.
        * @param rank face value of the card
        * @param suit suit of the card
@@ -184,8 +185,8 @@ public class Card {
    public void setCard(int rank, int suit) {
          gIndex = toIndex(rank, suit);
       }
-      
-      
+
+
    /**
     * Obtain the rank of this card
     * @return rank
@@ -193,7 +194,7 @@ public class Card {
       public int getRank() {
       return (int)(gIndex%NUM_RANKS);
       }
-      
+
       /**
     * Obtain the rank of this card
     * @return rank
@@ -201,7 +202,7 @@ public class Card {
       public static int getRank(int i) {
       return (int)(i%NUM_RANKS);
       }
-      
+
    /**
     * Obtain the suit of this card
     * @return suit
@@ -209,7 +210,7 @@ public class Card {
    public int getSuit() {
          return (int)(gIndex/NUM_RANKS);
    }
-   
+
 
    /**
     * Obtain the suit of this card
@@ -218,8 +219,8 @@ public class Card {
    public final static int getSuit(int i) {
       return (i / NUM_RANKS);
    }
-   
-   
+
+
    /**
     * Obtain a String representation of this Card
     * @return A string for this card
@@ -235,8 +236,8 @@ public class Card {
       }
       return s;
    }
-   
-   
+
+
    public static char getRankChar(int r) {
       char s;
       switch (r) {

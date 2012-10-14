@@ -1,4 +1,4 @@
-package ca.ualberta.cs.poker;
+package table;
 
 /***************************************************************************
  Copyright (c) 2000:
@@ -10,7 +10,7 @@ package ca.ualberta.cs.poker;
  ***************************************************************************/
 /**
  * Class for identifying / comparing / ranking Hands.
- * 
+ *
  * @author Aaron Davidson, Darse Billings, Denis Papp
  */
 
@@ -32,10 +32,10 @@ public class HandEvaluator {
        System.out.println(handEval.nameHand(hand2));
 
    }
-   
+
    /**
     * Get a numerical ranking of this hand.
-    * 
+    *
     * @param c1
     *           first hole card
     * @param c2
@@ -64,7 +64,7 @@ public class HandEvaluator {
 
    /**
     * Compares two hands against each other.
-    * 
+    *
     * @param h1
     *           The first hand
     * @param h2
@@ -84,7 +84,7 @@ public class HandEvaluator {
 
    /**
     * Compares two 5-7 card hands against each other.
-    * 
+    *
     * @param rank1
     *           The rank of the first hand
     * @param h2
@@ -134,7 +134,7 @@ public class HandEvaluator {
 
    /**
     * Get the best 5 card poker hand from a 7 card hand
-    * 
+    *
     * @param h
     *           Any 7 card poker hand
     * @return A Hand containing the highest ranked 5 card hand possible from the
@@ -149,7 +149,7 @@ public class HandEvaluator {
          nh.addCard(bh[i + 1]);
       return nh;
    }
-   
+
    private final static int unknown = -1;
    private final static int strflush = 9;
    private final static int quads = 8;
@@ -164,7 +164,7 @@ public class HandEvaluator {
 
    /**
     * Get a string from a hand type.
-    * 
+    *
     * @param handtype
     *           number coding a hand type
     * @return name of hand type
@@ -1028,11 +1028,11 @@ public class HandEvaluator {
    /**
     * Get a numerical ranking of this hand. Uses java based code, so may be
     * slower than using the native methods, but is more compatible this way.
-    * 
+    *
     * Based on Denis Papp's Loki Hand ID code (id.cpp) Given a 1-9 card hand,
     * will return a unique rank such that any two hands will be ranked with the
     * better hand having a higher rank.
-    * 
+    *
     * @param h a 1-9 card hand
     * @return a unique number representing the hand strength of the best 5-card
     *         poker hand in the given 7 cards. The higher the number, the better
@@ -1177,7 +1177,7 @@ public class HandEvaluator {
 
    /**
     * Return a string naming the hand
-    * 
+    *
     * @param rank
     *           calculated by rankHand_java()
     */
