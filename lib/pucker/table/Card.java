@@ -64,7 +64,7 @@ public class Card {
    public final static int NUM_RANKS = 13;
    public final static int NUM_CARDS = 52;
 
-      private int gIndex;
+   private int gIndex;
 
 
       /**
