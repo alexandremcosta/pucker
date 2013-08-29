@@ -1,25 +1,23 @@
 require "spec_helper"
 
 module Pucker
-
   describe Dealer do
     describe "#deal" do
-      before(:each) do
-        @dealer = Dealer.new
-      end
+      let(:dealer) { Dealer.new }
 
       it "deals cards" do
-        @dealer.deal.should be_an_instance_of Java::Table::Card
+        dealer.deal.should be_an_instance_of Java::Table::Card
       end
 
       it "deals 52 different cards" do
-        cards = (1..52).map{ @dealer.deal.getIndex }
-        cards.uniq.should have(52).cards
+        cards = []
+        52.times do cards << dealer.deal end
+        cards.uniq.should == cards
       end
 
-      it "don't deals 53 cards" do
-        52.times { @dealer.deal }
-        @dealer.deal.should be_false
+      it "doesn't deal 53 cards" do
+        52.times do dealer.deal end
+        dealer.deal.should be_false
       end
     end
   end
