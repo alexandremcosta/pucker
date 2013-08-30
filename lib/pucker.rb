@@ -1,3 +1,3 @@
-require 'pucker/dealer'
-require 'pucker/game'
-require 'pucker/player'
+require_relative 'pucker/dealer'
+require_relative 'pucker/game'
+require_relative 'pucker/player'
