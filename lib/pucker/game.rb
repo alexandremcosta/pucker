@@ -8,7 +8,7 @@ module Pucker
     end
 
     def play
-      #deal
+      setup_game
       #pot = collect_bets_pre_flop
       #deal_flop
       #pot += collect_bets
@@ -28,5 +28,17 @@ module Pucker
     def dealer
       @dealer ||= Dealer.new
     end
+
+    def setup_game
+      dealer.reset
+      players.rotate_positions
+      players.set_hands(dealer)
+    end
+
+    #def collect_bets_pre_flop
+    #  pot = 0
+    #  players.each do |p|
+    #  end
+    #end
   end
 end

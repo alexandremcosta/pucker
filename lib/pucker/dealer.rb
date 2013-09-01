@@ -12,6 +12,11 @@ module Pucker
       deck.deal
     end
 
+    def reset
+      deck.reset
+      deck.shuffle
+    end
+
     private
     def deck
       @deck ||= Deck.new(0)
