@@ -3,6 +3,23 @@ java_import 'table.Hand'
 
 module Pucker
   class Player
+    attr_accessor :stack
+
+    def initialize(amount=400)
+      @stack = amount
+    end
+
+    def get_from_stack(amount)
+      if @stack < amount
+        tmp = @stack
+        @stack = 0
+        return tmp
+      else
+        @stack -= amount
+        return amount
+      end
+    end
+
     def bet
       10
     end
