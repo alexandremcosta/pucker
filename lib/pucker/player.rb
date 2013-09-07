@@ -5,7 +5,7 @@ module Pucker
   class Player
     attr_accessor :stack
 
-    def initialize(amount=400)
+    def initialize(amount=STACK)
       @active = true
       @stack = amount
     end
@@ -23,7 +23,7 @@ module Pucker
     end
 
     def bet
-      10
+      40
     end
 
     def active?

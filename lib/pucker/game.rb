@@ -5,9 +5,9 @@ module Pucker
   class Game
     attr_reader :players
 
-    def initialize(count=5, amount=400)
-      count = 5 unless count.is_a? Integer
-      amount = 400 unless amount.is_a? Integer
+    def initialize(count=NUM_PLAYERS, amount=STACK)
+      count = NUM_PLAYERS unless count.is_a? Integer
+      amount = STACK unless amount.is_a? Integer
       @players = PlayerGroup.new(count, amount)
     end
 
@@ -38,7 +38,7 @@ module Pucker
     end
 
     def collect_blinds
-      players[0].get_from_stack(10) + players[1].get_from_stack(20)
+      players[0].get_from_stack(SMALL_BLIND) + players[1].get_from_stack(BIG_BLIND)
     end
 
     def collect_bets_from(first_player)

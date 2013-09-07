@@ -10,9 +10,9 @@ module Pucker
 
     attr_reader :container
 
-    def initialize(count=5, amount=400)
-      count = 5 unless count.is_a? Integer
-      amount = 400 unless amount.is_a? Integer
+    def initialize(count=NUM_PLAYERS, amount=STACK)
+      count = NUM_PLAYERS unless count.is_a? Integer
+      amount = STACK unless amount.is_a? Integer
       @container = Array.new(count) { player_source.call(amount) }
     end
 
