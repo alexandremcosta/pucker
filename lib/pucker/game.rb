@@ -5,21 +5,22 @@ module Pucker
   class Game
     attr_reader :players
 
-    def initialize(count=5)
+    def initialize(count=5, amount=400)
       count = 5 unless count.is_a? Integer
-      @players = PlayerGroup.new(count)
+      amount = 400 unless amount.is_a? Integer
+      @players = PlayerGroup.new(count, amount)
     end
 
     def play
       setup_game
       pot = collect_blinds
-      pot = collect_bets_from(2) # from UTG-1 to bigblind
+      pot = collect_bets_from(2) # from UTGs to bigblind
       deal_flop
-      pot += collect_bets_from(0) # from smallblind
+      pot += collect_bets_from(0) # from smallblind to UTGs
       deal_turn
-      pot += collect_bets_from(0) # from smallblind
+      pot += collect_bets_from(0) # from smallblind to UTGs
       deal_river
-      pot += collect_bets_from(0) # from smallblind
+      pot += collect_bets_from(0) # from smallblind to UTGs
       #winners = evaluate_winners
       #reward(winners, pot)
     end
@@ -32,14 +33,18 @@ module Pucker
     def setup_game
       @table_cards = []
       dealer.reset
-      players.rotate_positions
+      players.rotate_positions!
       players.set_hands(dealer)
+    end
+
+    def collect_blinds
+      players[0].get_from_stack(10) + players[1].get_from_stack(20)
     end
 
     def collect_bets_from(first_player)
       pot = 0
-      players.rotate(first_player).each do |p|
-        pot += player.bet if player.active?
+      players.rotate_positions(first_player).each do |p|
+        pot += p.bet if p.active?
       end
       return pot
     end
@@ -59,6 +64,9 @@ module Pucker
     def deal_table_card
       @table_cards << dealer.deal
     end
-  end
 
+    def evaluate_winners
+
+    end
+  end
 end
