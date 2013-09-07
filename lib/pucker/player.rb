@@ -6,12 +6,14 @@ module Pucker
     attr_accessor :stack
 
     def initialize(amount=400)
+      @active = true
       @stack = amount
     end
 
     def get_from_stack(amount)
       if @stack < amount
         tmp = @stack
+        @active = false
         @stack = 0
         return tmp
       else
@@ -25,7 +27,7 @@ module Pucker
     end
 
     def active?
-      true
+      @active
     end
 
     def hand

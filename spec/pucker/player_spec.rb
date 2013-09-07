@@ -6,14 +6,24 @@ module Pucker
   describe Player do
     describe "#get_from_stack" do
       let(:p) { Player.new(100) }
-      it "should get amount when player has more" do
-        p.get_from_stack(20).should == 20
-        p.stack.should == 80
+
+      context "when player has more" do
+        it "should get amount" do
+          p.get_from_stack(20).should == 20
+          p.stack.should == 80
+        end
       end
 
-      it "should zero stack when player has less" do
-        p.get_from_stack(120).should == 100
-        p.stack.should == 0
+      context "when player has less" do
+        it "should zero stack" do
+          p.get_from_stack(120).should == 100
+          p.stack.should == 0
+        end
+
+        it "should desactivate player" do
+          p.get_from_stack(120)
+          p.active?.should == false
+        end
       end
     end
 
