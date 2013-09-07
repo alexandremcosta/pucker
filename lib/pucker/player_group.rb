@@ -6,13 +6,14 @@ module Pucker
     include Enumerable
 
     extend Forwardable
-    def_delegators :container, :each
+    def_delegators :container, :each, :[]
 
     attr_reader :container
 
-    def initialize(count=5)
+    def initialize(count=5, amount=400)
       count = 5 unless count.is_a? Integer
-      @container = Array.new(count) { player_source.call }
+      amount = 400 unless amount.is_a? Integer
+      @container = Array.new(count) { player_source.call(amount) }
     end
 
     def set_hands(dealer)
@@ -21,8 +22,12 @@ module Pucker
       end
     end
 
-    def rotate_positions
+    def rotate_positions!
       @container.rotate!
+    end
+
+    def rotate_positions(index=1)
+      @container.rotate(index)
     end
 
     private
