@@ -33,7 +33,7 @@ module Pucker
     def setup_game
       @table_cards = []
       dealer.reset
-      players.rotate_positions!
+      players.rotate!
       players.set_hands(dealer)
     end
 
@@ -43,7 +43,7 @@ module Pucker
 
     def collect_bets_from(first_player)
       pot = 0
-      players.rotate_positions(first_player).each do |p|
+      players.rotate(first_player).each do |p|
         pot += p.bet if p.active?
       end
       return pot

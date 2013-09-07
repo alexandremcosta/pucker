@@ -6,7 +6,7 @@ module Pucker
     include Enumerable
 
     extend Forwardable
-    def_delegators :container, :each, :[]
+    def_delegators :container, :each, :[], :rotate, :rotate!
 
     attr_reader :container
 
@@ -20,14 +20,6 @@ module Pucker
       @container.each do |player|
         player.set_hand(dealer.deal, dealer.deal)
       end
-    end
-
-    def rotate_positions!
-      @container.rotate!
-    end
-
-    def rotate_positions(index=1)
-      @container.rotate(index)
     end
 
     private

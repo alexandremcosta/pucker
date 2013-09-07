@@ -20,16 +20,6 @@ module Pucker
         players.set_hands(dealer)
       end
     end
-
-    describe "#rotate_positions!" do
-      before do
-        @initial_container = Array.new(players.container)
-        players.rotate_positions!
-      end
-      it "should rotate players positions" do
-        players.container.should == @initial_container.rotate
-      end
-    end
   end
 end
 
