@@ -1,5 +1,4 @@
 require 'java'
-$CLASSPATH << File.expand_path('../', __FILE__)
 java_import 'table.Deck'
 
 module Pucker

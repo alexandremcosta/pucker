@@ -34,5 +34,17 @@ module Pucker
         player.hand.should have(2).items
       end
     end
+
+    describe "#full_hand" do
+      it "should misc players and table cards" do
+        table_cards = []
+        1.upto(5) do |index| table_cards << Card.new(index) end
+
+        player = Player.new
+        player.set_hand(Card.new(6), Card.new(7))
+
+        player.full_hand(table_cards).should have(7).items
+      end
+    end
   end
 end

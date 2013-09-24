@@ -1,3 +1,4 @@
+$CLASSPATH << File.expand_path('../pucker', __FILE__)
 require_relative 'pucker/game'
 
 module Pucker

@@ -16,6 +16,7 @@ package table;
 
 public class HandEvaluator {
 
+   /**
    public static void main(String args[]){
        Hand hand1 = new Hand("Kc 8c 9c Tc Jc Qc Ac");
        Hand hand2 = new Hand("Kc 8c 9c Tc Jc Qc Ad");
@@ -32,6 +33,7 @@ public class HandEvaluator {
        System.out.println(handEval.nameHand(hand2));
 
    }
+   */
 
    /**
     * Get a numerical ranking of this hand.

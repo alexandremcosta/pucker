@@ -23,7 +23,7 @@ module Pucker
     end
 
     def bet
-      40
+      get_from_stack(40)
     end
 
     def active?
@@ -38,6 +38,16 @@ module Pucker
       reset_hand
       hand.add_card(card1)
       hand.add_card(card2)
+    end
+
+    def full_hand(table_cards)
+      full_hand = Hand.new(hand)
+      table_cards.each do |card| full_hand.add_card(card) end
+      return full_hand
+    end
+
+    def reward(price)
+      @stack += price
     end
 
     private
