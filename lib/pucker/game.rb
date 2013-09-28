@@ -46,8 +46,12 @@ module Pucker
 
     def collect_bets_from(first_player)
       pot = 0
-      players.rotate(first_player).each do |p|
-        pot += p.bet if p.active?
+      new_round = true
+      while new_round do
+        new_round = false
+        players.rotate(first_player).each do |p|
+          pot += p.bet if p.active?
+        end
       end
       return pot
     end
