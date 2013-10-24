@@ -1,5 +1,5 @@
+require_relative 'players'
 require 'forwardable'
-require_relative 'player'
 
 module Pucker
   class PlayerGroup

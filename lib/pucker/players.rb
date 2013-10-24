@@ -2,6 +2,27 @@ require 'java'
 java_import 'table.Hand'
 
 module Pucker
+  class DummyPlayer < Player
+    def bet(min_bet = 0)
+      choice = rand
+
+      if (choice < 0.3) || (@stack - min_bet) < (@stack / 2) #FOLD
+        fold
+      elsif choice < 0.8 #CHECK
+        get_from_stack(min_bet)
+      else #RAISE
+        amount = min_bet
+        amount += rand(@stack-amount+1)
+        get_from_stack(amount)
+      end
+    end
+
+    protected
+    def fold
+      return @active = false
+    end
+  end
+
   class Player
     attr_accessor :stack
 
@@ -11,7 +32,7 @@ module Pucker
     end
 
     def get_from_stack(amount)
-      if @stack < amount
+      if @stack <= amount
         tmp = @stack
         @active = false
         @stack = 0
@@ -22,7 +43,7 @@ module Pucker
       end
     end
 
-    def bet
+    def bet(min_bet = 0)
       get_from_stack(40)
     end
 
