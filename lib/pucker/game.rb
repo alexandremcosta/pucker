@@ -6,7 +6,7 @@ require_relative 'player_group'
 
 module Pucker
   class Game
-    attr_reader :players, :table_cards
+    attr_reader :players
 
     def initialize(count=NUM_PLAYERS, amount=STACK)
       count = NUM_PLAYERS unless count.is_a? Integer
@@ -17,13 +17,12 @@ module Pucker
     def play
       setup_game
       pot = collect_blinds
-      pot += collect_bets_from(2) # from UTGs to bigblind
       deal_flop
-      pot += collect_bets_from(0) # from smallblind to UTGs
+      pot += collect_bets
       deal_turn
-      pot += collect_bets_from(0) # from smallblind to UTGs
+      pot += collect_bets
       deal_river
-      pot += collect_bets_from(0) # from smallblind to UTGs
+      pot += collect_bets
       winners = evaluate_winners
       reward(winners, pot)
     end
@@ -34,23 +33,37 @@ module Pucker
     end
 
     def setup_game
-      @table_cards = []
+      table_cards.clear
       dealer.reset
       players.rotate!
       players.set_hands(dealer)
     end
 
     def collect_blinds
-      players[0].get_from_stack(SMALL_BLIND) + players[1].get_from_stack(BIG_BLIND)
+      pot = 0
+      players.each do |p|
+        pot += p.get_from_stack(BIG_BLIND)
+      end
+      return pot
     end
 
-    def collect_bets_from(first_player)
-      pot = 0
+    def collect_bets
+      pot = max_bet = first_player = 0
       new_round = true
-      while new_round do
+
+      while new_round
         new_round = false
-        players.rotate(first_player).each do |p|
-          pot += p.bet if p.active?
+
+        players.rotate(first_player).each_with_index do |p, i|
+          last_bet = p.bet(max_bet) if p.active?
+
+          if last_bet && last_bet > max_bet # In case of raise
+            max_bet = last_bet
+            first_player = i + 1
+            new_round = true
+
+            break
+          end
         end
       end
       return pot
@@ -69,7 +82,7 @@ module Pucker
     end
 
     def deal_table_card
-      @table_cards << dealer.deal
+      table_cards << dealer.deal
     end
 
     def evaluate_winners
@@ -88,6 +101,10 @@ module Pucker
     def reward(winners, pot)
       prize = pot / winners.size
       winners.each do |player| player.reward(prize) end
+    end
+
+    def table_cards
+      @table_cards ||= []
     end
   end
 end
