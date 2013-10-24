@@ -19,7 +19,7 @@ module Pucker
 
     protected
     def fold
-      return @active = false
+      @active = false
     end
   end
 
