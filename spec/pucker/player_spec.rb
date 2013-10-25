@@ -47,4 +47,27 @@ module Pucker
       end
     end
   end
+
+  describe DummyPlayer, wip: true do
+    let(:min_value) { 0 }
+    let(:p) { DummyPlayer.new(100) }
+    subject { p.bet(min_value) }
+
+    describe "#bet" do
+      context "when he folds" do
+        before { p.should_receive(:rand).and_return(0.2) }
+        it { should be_false }
+      end
+      context "when he checks" do
+        before { p.should_receive(:rand).and_return(0.7) }
+        it { should == min_value }
+      end
+      context "when he raises" do
+        before { p.stub(:rand).and_return(0.9, 50) }
+        it "should return a value between min_value and stack" do
+          subject.should be_between(min_value, p.stack)
+        end
+      end
+    end
+  end
 end
