@@ -35,6 +35,12 @@ module Pucker
     def setup_game
       table_cards.clear
       dealer.reset
+      prepare_players
+    end
+
+    def prepare_players
+      players.delete_if{|p| p.stack <= 0}
+      players.each{|p| p.reset_round_state}
       players.rotate!
       players.set_hands(dealer)
     end
@@ -48,25 +54,25 @@ module Pucker
     end
 
     def collect_bets
-      pot = max_bet = first_player = 0
-      new_round = true
+      max_bet = 0
+      last_player = previous_player =  players.last
 
-      while new_round
-        new_round = false
-
-        players.rotate(first_player).each_with_index do |p, i|
-          last_bet = p.bet(max_bet) if p.active?
-
-          if last_bet && last_bet > max_bet # In case of raise
+      players.cycle do |player|
+        last_bet = player.bet_if_active(max_bet)
+        
+        if last_bet
+          if last_bet > max_bet #RAISED
             max_bet = last_bet
-            first_player = i + 1
-            new_round = true
-
-            break
+            last_player = previous_player
+          end
+          if player.allin?
+            #handle sidepots
           end
         end
+
+        previous_player = player
+        break if player == last_player
       end
-      return pot
     end
 
     def deal_flop

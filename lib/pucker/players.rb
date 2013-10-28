@@ -7,13 +7,15 @@ module Pucker
 
     def initialize(amount=STACK)
       @active = true
+      @allin = false
       @stack = amount
     end
 
     def get_from_stack(amount)
       if @stack <= amount
         tmp = @stack
-        @active = false
+        inactive!
+        allin!
         @stack = 0
         return tmp
       else
@@ -22,12 +24,20 @@ module Pucker
       end
     end
 
-    def bet(min_bet = 0)
-      get_from_stack(40)
+    def bet_if_active(min_bet)
+      bet(min_bet) if active?
+    end
+
+    def bet(min_bet)
+      get_from_stack(min_bet)
     end
 
     def active?
       @active
+    end
+
+    def allin?
+      @allin
     end
 
     def hand
@@ -50,14 +60,29 @@ module Pucker
       @stack += price
     end
 
+    def reset_round_state
+      @active = true
+      @allin = false
+    end
+
+    def fold
+      inactive!
+    end
+
     private
     def reset_hand
       @hand = hand.make_empty
     end
+    def inactive!
+      @active = false
+    end
+    def allin!
+      @allin = true
+    end
   end
 
   class DummyPlayer < Player
-    def bet(min_bet = 0)
+    def bet(min_bet)
       choice = rand
 
       if (choice < 0.3) || (@stack - min_bet) < (@stack / 2) #FOLD
@@ -70,11 +95,5 @@ module Pucker
         get_from_stack(amount)
       end
     end
-
-    protected
-    def fold
-      @active = false
-    end
   end
-
 end

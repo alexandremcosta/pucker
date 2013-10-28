@@ -4,9 +4,8 @@ require 'forwardable'
 module Pucker
   class PlayerGroup
     include Enumerable
-
     extend Forwardable
-    def_delegators :container, :each, :[], :rotate, :rotate!
+    def_delegators :container, :each, :[], :rotate, :rotate!, :size, :last, :delete_if
 
     attr_reader :container
 

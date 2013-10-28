@@ -4,6 +4,12 @@ java_import 'table.Card'
 
 module Pucker
   describe Player do
+    describe "#bet" do
+      it "should check every time" do
+        Player.new.bet(30).should == 30
+      end
+    end
+
     describe "#get_from_stack" do
       let(:p) { Player.new(100) }
 
@@ -48,7 +54,7 @@ module Pucker
     end
   end
 
-  describe DummyPlayer, wip: true do
+  describe DummyPlayer do
     let(:min_value) { 0 }
     let(:p) { DummyPlayer.new(100) }
     subject { p.bet(min_value) }
