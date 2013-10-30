@@ -3,6 +3,7 @@ java_import 'table.HandEvaluator'
 
 require_relative 'dealer'
 require_relative 'player_group'
+require_relative 'pot'
 
 module Pucker
   class Game
@@ -16,15 +17,15 @@ module Pucker
 
     def play
       setup_game
-      pot = collect_blinds
+      collect_blinds
       deal_flop
-      pot += collect_bets
+      collect_bets
       deal_turn
-      pot += collect_bets
+      collect_bets
       deal_river
-      pot += collect_bets
+      collect_bets
       winners = evaluate_winners
-      reward(winners, pot)
+      #reward(winners, pot)
     end
 
     private
@@ -35,6 +36,7 @@ module Pucker
     def setup_game
       table_cards.clear
       dealer.reset
+      pot.reset
       prepare_players
     end
 
@@ -46,11 +48,10 @@ module Pucker
     end
 
     def collect_blinds
-      pot = 0
       players.each do |p|
-        pot += p.get_from_stack(BIG_BLIND)
+        amount = p.get_from_stack(BIG_BLIND)
+        pot.add_bet(p, amount)
       end
-      return pot
     end
 
     def collect_bets
@@ -59,15 +60,13 @@ module Pucker
 
       players.cycle do |player|
         last_bet = player.bet_if_active(max_bet)
-        
+
         if last_bet
           if last_bet > max_bet #RAISED
             max_bet = last_bet
             last_player = previous_player
           end
-          if player.allin?
-            #handle sidepots
-          end
+          pot.add_bet(player, last_bet)
         end
 
         previous_player = player
@@ -104,13 +103,17 @@ module Pucker
       return winners.keys
     end
 
-    def reward(winners, pot)
-      prize = pot / winners.size
-      winners.each do |player| player.reward(prize) end
-    end
+    #def reward(winners, pot)
+    #  prize = pot / winners.size
+    #  winners.each do |player| player.reward(prize) end
+    #end
 
     def table_cards
       @table_cards ||= []
+    end
+
+    def pot
+      @pot ||= Pot.new
     end
   end
 end

@@ -16,11 +16,6 @@ module Pucker
     end
 
     describe "private methods" do
-      describe "#collect_blinds" do
-        subject { Game.new.send(:collect_blinds) }
-        it { should == NUM_PLAYERS*BIG_BLIND }
-      end
-
       describe "#prepare_players" do
         before do
           @game  = Game.new
