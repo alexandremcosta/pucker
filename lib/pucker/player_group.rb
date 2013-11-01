@@ -21,6 +21,10 @@ module Pucker
       end
     end
 
+    def eligible
+      @container.select{|p| p.active? || p.allin? }
+    end
+
     private
     def player_source
       @player_source ||= Player.public_method(:new)

@@ -10,6 +10,24 @@ module Pucker
       all_bets[player] ||= 0
       all_bets[player] += amount
     end
+    
+    def total_contributed_by(player)
+      all_bets[player]
+    end
+
+    def get_from_all(amount)
+      total = 0
+      all_bets.each do |player, bet|
+        to_sub = if bet - amount < 0
+          bet
+        else
+          amount
+        end
+        all_bets[player] -= to_sub
+        total += to_sub
+      end
+      return total
+    end
 
     def reset
       @all_bets = Hash.new

@@ -24,8 +24,7 @@ module Pucker
       collect_bets
       deal_river
       collect_bets
-      winners = evaluate_winners
-      #reward(winners, pot)
+      reward eligible_players_by_rank
     end
 
     private
@@ -90,23 +89,26 @@ module Pucker
       table_cards << dealer.deal
     end
 
-    def evaluate_winners
-      rank = {}
-      max = 0
-
-      players.each do |p|
-        rank[p] = HandEvaluator.rank_hand(p.full_hand(table_cards))
-        max = rank[p] if rank[p] > max
-      end
-
-      winners = rank.select {|player, rank| rank == max}
-      return winners.keys
+    def eligible_players_by_rank
+      players.eligible.sort_by do |p|
+        HandEvaluator.rank_hand(p.full_hand(table_cards))
+      end.reverse.group_by do |p|
+        HandEvaluator.rank_hand(p.full_hand(table_cards))
+      end.each do |rank, people|
+        people.sort_by! do |p|
+          pot.total_contributed_by(p)
+        end
+      end.values.flatten
     end
 
-    #def reward(winners, pot)
-    #  prize = pot / winners.size
-    #  winners.each do |player| player.reward(prize) end
-    #end
+    def reward(winners)
+      winners.each do |player|
+        amount = pot.total_contributed_by(player)
+        prize = pot.get_from_all(amount)
+        player.reward(prize)
+        break if pot.empty?
+      end
+    end
 
     def table_cards
       @table_cards ||= []
