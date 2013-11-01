@@ -89,6 +89,7 @@ module Pucker
       table_cards << dealer.deal
     end
 
+    # according to: http://stackoverflow.com/questions/5462583/poker-side-pot-algorithm
     def eligible_players_by_rank
       players.eligible.sort_by do |p|
         HandEvaluator.rank_hand(p.full_hand(table_cards))
@@ -101,6 +102,7 @@ module Pucker
       end.values.flatten
     end
 
+    # according to: http://stackoverflow.com/questions/5462583/poker-side-pot-algorithm
     def reward(winners)
       winners.each do |player|
         amount = pot.total_contributed_by(player)

@@ -15,6 +15,16 @@ module Pucker
       end
     end
 
+    describe "#elegigle_players_by_rank" do
+      it "sort players"
+    end
+    describe "#reward" do
+      it "reward players"
+    end
+    describe "#collect_bets" do
+      it "collect bets"
+    end
+
     describe "private methods" do
       describe "#prepare_players" do
         before do

@@ -21,5 +21,9 @@ module Pucker
         end
       end
     end
+
+    describe "#get_from_all" do
+      it "should get an amount from every players bet"
+    end
   end
 end
