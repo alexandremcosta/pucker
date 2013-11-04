@@ -43,6 +43,14 @@ module Pucker
       players.set_hands(dealer)
     end
 
+    def pot
+      @pot ||= Pot.new
+    end
+
+    def table_cards
+      @table_cards ||= []
+    end
+
     def collect_blinds
       players.each do |p|
         amount = p.get_from_stack(BIG_BLIND)
@@ -103,14 +111,6 @@ module Pucker
         player.reward(prize)
         break if pot.empty?
       end
-    end
-
-    def table_cards
-      @table_cards ||= []
-    end
-
-    def pot
-      @pot ||= Pot.new
     end
   end
 end

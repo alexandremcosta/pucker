@@ -15,9 +15,6 @@ module Pucker
       end
     end
 
-    describe "#elegigle_players_by_rank" do
-      it "sort players"
-    end
     describe "#reward" do
       it "reward players"
     end
@@ -53,6 +50,22 @@ module Pucker
           second_player = @game.players[1]
           @game.send(:prepare_players)
           @game.players.first.should == second_player
+        end
+      end
+
+      describe "#elegigle_players_by_rank" do
+        let(:game) { Game.new(3) }
+        before do
+          game.players[0].stub(:hand_rank).and_return(10)
+          game.players[1].stub(:hand_rank).and_return(2)
+          game.players[2].stub(:hand_rank).and_return(10)
+          game.stub_chain(:pot, :total_contributed_by).with(game.players[0]).and_return(100)
+          game.stub_chain(:pot, :total_contributed_by).with(game.players[1]).and_return(80)
+          game.stub_chain(:pot, :total_contributed_by).with(game.players[2]).and_return(20)
+        end
+        it "sort players" do
+          game.send(:eligible_players_by_rank).first.should == game.players[2]
+          game.send(:eligible_players_by_rank).last.should == game.players[1]
         end
       end
     end
