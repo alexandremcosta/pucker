@@ -18,11 +18,7 @@ module Pucker
     def get_from_all(amount)
       total = 0
       all_bets.each do |player, bet|
-        to_sub = if bet - amount < 0
-          bet
-        else
-          amount
-        end
+        to_sub = if bet < amount then bet else amount  end
         all_bets[player] -= to_sub
         total += to_sub
       end
@@ -33,8 +29,9 @@ module Pucker
       @all_bets = Hash.new
     end
 
-    def contributors
-      all_bets.keys
+    def empty?
+      @all_bets.each { |p, b| return false if b > 0 }
+      return true
     end
   end
 end
