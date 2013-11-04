@@ -100,16 +100,20 @@ module Pucker
       end.reverse.group_by do |p| p.hand_rank(table_cards)
       end.each do |rank, people|
         people.sort_by! do |p| pot.total_contributed_by(p) end
-      end.values.flatten
+      end.values
     end
 
     # according to: http://stackoverflow.com/questions/5462583/poker-side-pot-algorithm
     def reward(winners)
-      winners.each do |player|
-        amount = pot.total_contributed_by(player)
-        prize = pot.get_from_all(amount)
-        player.reward(prize)
-        break if pot.empty?
+      winners.each do |tied_players|
+        while tied_players.any? do
+          player = tied_players.first
+          amount = pot.total_contributed_by(player)
+          prize = pot.get_from_all(amount) / tied_players.size
+          tied_players.each do |p| p.reward(prize) end
+          tied_players.shift
+          return if pot.empty?
+        end
       end
     end
   end

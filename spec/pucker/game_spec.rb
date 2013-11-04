@@ -15,9 +15,6 @@ module Pucker
       end
     end
 
-    describe "#reward" do
-      it "reward players"
-    end
     describe "#collect_bets" do
       it "collect bets"
     end
@@ -53,19 +50,38 @@ module Pucker
         end
       end
 
-      describe "#elegigle_players_by_rank" do
-        let(:game) { Game.new(3) }
+      context "integration tests for rewards" do
+        # Scenario described in:
+        # http://stackoverflow.com/questions/5462583/poker-side-pot-algorithm
+
+        let(:game) { Game.new(3, 1000) }
+
         before do
           game.players[0].stub(:hand_rank).and_return(10)
           game.players[1].stub(:hand_rank).and_return(2)
           game.players[2].stub(:hand_rank).and_return(10)
-          game.stub_chain(:pot, :total_contributed_by).with(game.players[0]).and_return(100)
-          game.stub_chain(:pot, :total_contributed_by).with(game.players[1]).and_return(80)
-          game.stub_chain(:pot, :total_contributed_by).with(game.players[2]).and_return(20)
+          pot = Pot.new
+          pot.add_bet(game.players[0], game.players[0].get_from_stack(100))
+          pot.add_bet(game.players[1], game.players[1].get_from_stack(80))
+          pot.add_bet(game.players[2], game.players[2].get_from_stack(20))
+          game.stub(:pot).and_return(pot)
         end
-        it "sort players" do
-          game.send(:eligible_players_by_rank).first.should == game.players[2]
-          game.send(:eligible_players_by_rank).last.should == game.players[1]
+
+        describe "#eligible_players_by_rank" do
+          it "sort players" do
+            game.send(:eligible_players_by_rank).first.first.should == game.players[2]
+            game.send(:eligible_players_by_rank).last.first.should == game.players[1]
+          end
+        end
+
+        describe "reward eligible_players_by_rank" do
+          it "rewards players" do
+            eligible = game.send(:eligible_players_by_rank)
+            game.send(:reward, eligible)
+            game.players[0].stack.should == 1070
+            game.players[1].stack.should == 920
+            game.players[2].stack.should == 1010
+          end
         end
       end
     end
