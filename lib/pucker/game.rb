@@ -1,6 +1,3 @@
-require 'java'
-java_import 'table.HandEvaluator'
-
 require_relative 'dealer'
 require_relative 'player_group'
 require_relative 'pot'
@@ -91,14 +88,10 @@ module Pucker
 
     # according to: http://stackoverflow.com/questions/5462583/poker-side-pot-algorithm
     def eligible_players_by_rank
-      players.eligible.sort_by do |p|
-        HandEvaluator.rank_hand(p.full_hand(table_cards))
-      end.reverse.group_by do |p|
-        HandEvaluator.rank_hand(p.full_hand(table_cards))
+      players.eligible.sort_by do |p| p.hand_rank(table_cards)
+      end.reverse.group_by do |p| p.hand_rank(table_cards)
       end.each do |rank, people|
-        people.sort_by! do |p|
-          pot.total_contributed_by(p)
-        end
+        people.sort_by! do |p| pot.total_contributed_by(p) end
       end.values.flatten
     end
 

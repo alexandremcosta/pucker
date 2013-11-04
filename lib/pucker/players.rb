@@ -1,5 +1,7 @@
 require 'java'
 java_import 'table.Hand'
+java_import 'table.HandEvaluator'
+
 
 module Pucker
   class Player
@@ -50,10 +52,13 @@ module Pucker
       hand.add_card(card2)
     end
 
-    def full_hand(table_cards)
-      full_hand = Hand.new(hand)
-      table_cards.each do |card| full_hand.add_card(card) end
-      return full_hand
+    def hand_rank(table_cards)
+      old_table_cards = @table_cards
+      @table_cards = Array.new(table_cards)
+      if old_table_cards != @table_cards
+        @rank = HandEvaluator.rank_hand(full_hand(@table_cards))
+      end
+      @rank
     end
 
     def reward(price)
@@ -69,7 +74,12 @@ module Pucker
       inactive!
     end
 
-    private
+    protected
+    def full_hand(table_cards)
+      full_hand = Hand.new(hand)
+      table_cards.each do |card| full_hand.add_card(card) end
+      return full_hand
+    end
     def reset_hand
       @hand = hand.make_empty
     end

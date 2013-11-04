@@ -41,15 +41,38 @@ module Pucker
       end
     end
 
-    describe "#full_hand" do
-      it "should misc players and table cards" do
-        table_cards = []
-        1.upto(5) do |index| table_cards << Card.new(index) end
+    describe "#hand_rank" do
+      before do
+        @player = Player.new
+        @player.set_hand(Card.new(6), Card.new(7))
+        @table = []
+        1.upto(4) do |index| @table << Card.new(index) end
+      end
 
-        player = Player.new
-        player.set_hand(Card.new(6), Card.new(7))
+      it "should rank players hand according to table cards" do
+        first_rank = @player.hand_rank(@table)
+        @table << Card.new(5)
+        second_rank = @player.hand_rank(@table)
+        second_rank.should > first_rank
+      end
 
-        player.full_hand(table_cards).should have(7).items
+      it "shouldnt call HandEvaluator again if table cards hasnt changed" do
+        HandEvaluator.should_receive(:rank_hand).once
+        2.times do @player.hand_rank(@table) end
+      end
+    end
+
+    context "protected methods" do
+      describe "#full_hand" do
+        it "should misc players and table cards" do
+          table_cards = []
+          1.upto(5) do |index| table_cards << Card.new(index) end
+
+          player = Player.new
+          player.set_hand(Card.new(6), Card.new(7))
+
+          player.send(:full_hand, table_cards).should have(7).items
+        end
       end
     end
   end
