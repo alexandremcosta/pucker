@@ -4,6 +4,14 @@ java_import 'table.Card'
 
 module Pucker
   describe Player do
+    describe "#initialize" do
+      it "should have a uniq id" do
+        ids = 1000.times.map { Player.new.id }
+        ids.uniq.should have(1000).strings
+        ids.uniq.should == ids
+      end
+    end
+
     describe "#bet" do
       it "should check every time" do
         Player.new.bet(30).should == 30

@@ -37,9 +37,8 @@ module Pucker
     end
 
     def prepare_players
-      players.delete_if{|p| p.stack <= 0}
-      players.each{|p| p.reset_round_state}
       players.rotate!
+      players.reset
       players.set_hands(dealer)
     end
 

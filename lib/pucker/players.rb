@@ -1,16 +1,18 @@
+require_relative 'sequence'
 require 'java'
 java_import 'table.Hand'
 java_import 'table.HandEvaluator'
 
-
 module Pucker
   class Player
     attr_accessor :stack
+    attr_reader :id
 
     def initialize(amount=STACK)
       @active = true
       @allin = false
       @stack = amount
+      @id = self.class.name.split('::').last + Sequence.next.to_s
     end
 
     def get_from_stack(amount)

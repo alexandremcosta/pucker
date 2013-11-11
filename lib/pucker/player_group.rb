@@ -5,14 +5,12 @@ module Pucker
   class PlayerGroup
     include Enumerable
     extend Forwardable
-    def_delegators :container, :each, :[], :rotate, :rotate!, :size, :last, :delete_if
-
-    attr_reader :container
+    def_delegators :@container, :each, :[], :rotate, :rotate!, :size, :last, :first
 
     def initialize(count=NUM_PLAYERS, amount=STACK)
-      count = NUM_PLAYERS unless count.is_a? Integer
-      amount = STACK unless amount.is_a? Integer
-      @container = Array.new(count) { player_source.call(amount) }
+      @count = count.is_a?(Integer) ? count : NUM_PLAYERS
+      @amount = amount.is_a?(Integer) ? amount : STACK
+      @container = Array.new(@count) { player_source.call(@amount) }
     end
 
     def set_hands(dealer)
@@ -25,9 +23,17 @@ module Pucker
       @container.select{|p| p.active? || p.allin? }
     end
 
+    def reset
+      @container.delete_if{|p| p.stack <= 0}
+      while @container.size < @count do
+        @container.unshift(player_source.call(@amount))
+      end
+      @container.each{|p| p.reset_round_state}
+    end
+
     private
     def player_source
-      @player_source ||= Player.public_method(:new)
+      @player_source ||= DummyPlayer.public_method(:new)
     end
   end
 end
