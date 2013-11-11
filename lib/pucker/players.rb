@@ -76,6 +76,10 @@ module Pucker
       inactive!
     end
 
+    def to_s
+      "#{id} - #{hand} - #{stack}"
+    end
+
     protected
     def full_hand(table_cards)
       full_hand = Hand.new(hand)

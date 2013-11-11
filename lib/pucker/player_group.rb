@@ -5,7 +5,7 @@ module Pucker
   class PlayerGroup
     include Enumerable
     extend Forwardable
-    def_delegators :@container, :each, :[], :rotate, :rotate!, :size, :last, :first
+    def_delegators :@container, :each, :map, :[], :rotate, :rotate!, :size, :last, :first
 
     def initialize(count=NUM_PLAYERS, amount=STACK)
       @count = count.is_a?(Integer) ? count : NUM_PLAYERS

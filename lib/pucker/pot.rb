@@ -33,5 +33,13 @@ module Pucker
       @all_bets.each { |p, b| return false if b > 0 }
       return true
     end
+
+    def to_s
+      str = ''
+      all_bets.each do |player, bet|
+        str << player.id + ': ' + bet.to_s + " | "
+      end
+      return str
+    end
   end
 end

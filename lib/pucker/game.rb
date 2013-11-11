@@ -1,6 +1,7 @@
 require_relative 'dealer'
 require_relative 'player_group'
 require_relative 'pot'
+require 'pry'
 
 module Pucker
   class Game
@@ -21,7 +22,19 @@ module Pucker
       collect_bets
       deal_river
       collect_bets
-      reward eligible_players_by_rank
+
+      if players.eligible.empty?
+        LOG.error("No eligible players") 
+        return false
+      end
+
+      winners = eligible_players_by_rank
+      LOG.info("POT: #{pot}")
+      LOG.info("TABLE CARDS: #{table_cards.map{|c| c.toString}}")
+      LOG.info("WINNERS BEFORE REWARD: #{winners.flatten.map{|p| [p.id, p.hand.toString, p.stack]}}")
+      reward winners
+      LOG.info("PLAYERS AFTER REWARD: #{players.map{|p| [p.id, p.hand.toString, p.stack]}}")
+      return true
     end
 
     private
@@ -62,6 +75,7 @@ module Pucker
       last_player = previous_player =  players.last
 
       players.cycle do |player|
+        break if players.eligible == 1
         last_bet = player.bet_if_active(max_bet)
 
         if last_bet
