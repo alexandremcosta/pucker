@@ -23,10 +23,16 @@ module Pucker
       @container.select{|p| p.active? || p.allin? }
     end
 
+    def has_multiple_active?
+      @container.select{|p| p.active?}.size > 1
+    end
+
     def reset
-      @container.delete_if{|p| p.stack <= 0}
-      while @container.size < @count do
-        @container.unshift(player_source.call(@amount))
+      @container.each do |p|
+        if p.stack <= 0
+          p.stack = @amount
+          LOG.info("#{p.id} lost")
+        end
       end
       @container.each{|p| p.reset_round_state}
     end

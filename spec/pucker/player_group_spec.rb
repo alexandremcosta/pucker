@@ -29,12 +29,11 @@ module Pucker
         players.size.should == size
       end
 
-      context "when one player has no stack" do
-        it "should substitute this player" do
-          first_player = players.first
-          first_player.stub(:stack).and_return(0)
+      context "when players have ZERO stack" do
+        it "should increase back its stack"  do
+          players.first.stack = 0
+          players.last.stack = 0
           players.reset
-          players.should_not include first_player
           players.each do |player|
             player.stack.should > 0
           end
