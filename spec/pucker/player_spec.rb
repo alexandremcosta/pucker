@@ -12,6 +12,21 @@ module Pucker
       end
     end
 
+    describe "#bet_if_active" do
+      let(:player) { Player.new }
+      subject { player.bet_if_active(20) }
+
+      it "should return what #bet returns" do
+        player.should_receive(:bet).with(20).and_return('any number')
+        subject.should == 'any number'
+      end
+
+      context "when player is NOT active" do
+        before { player.stub(:active?).and_return(false) }
+        it { should be_false }
+      end
+    end
+
     describe "#bet" do
       it "should check every time" do
         Player.new.bet(30).should == 30

@@ -75,7 +75,7 @@ module Pucker
       last_player = previous_player =  players.last
 
       players.cycle do |player|
-        break if players.eligible == 1
+        break if !players.has_multiple_active?
         last_bet = player.bet_if_active(max_bet)
 
         if last_bet
