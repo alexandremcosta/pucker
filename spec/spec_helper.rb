@@ -1,3 +1,5 @@
+ENV['test'] = 'true'
+
 require 'pucker'
 
 RSpec.configure do |config|

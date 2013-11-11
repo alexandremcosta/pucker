@@ -1,7 +1,7 @@
 require_relative 'dealer'
 require_relative 'player_group'
 require_relative 'pot'
-require 'pry'
+require_relative 'multi_logger'
 
 module Pucker
   class Game

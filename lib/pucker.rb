@@ -1,6 +1,5 @@
 $CLASSPATH << File.expand_path('../pucker', __FILE__)
 require_relative 'pucker/game'
-require_relative 'pucker/multi_logger'
 
 module Pucker
   NUM_PLAYERS = 5
