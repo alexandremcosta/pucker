@@ -31,9 +31,9 @@ module Pucker
       winners = eligible_players_by_rank
       LOG.info("POT: #{pot}")
       LOG.info("TABLE CARDS: #{table_cards.map{|c| c.toString}}")
-      LOG.info("WINNERS BEFORE REWARD: #{winners.flatten.map{|p| [p.id, p.hand.toString, p.stack]}}")
+      LOG.info("WINNERS BEFORE REWARD: #{winners.flatten.map{|p| [p.id, p.hand.toString.strip, p.stack]}}")
       reward winners
-      LOG.info("PLAYERS AFTER REWARD: #{players.map{|p| [p.id, p.hand.toString, p.stack]}}")
+      LOG.info("AFTER REWARD: #{players.map{|p| [p.id, p.hand.toString.strip, p.stack]}}\n")
       return true
     end
 

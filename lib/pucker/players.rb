@@ -17,9 +17,9 @@ module Pucker
 
     def get_from_stack(amount)
       if @stack <= amount
-        tmp = @stack
         inactive!
         allin!
+        tmp = @stack
         @stack = 0
         return tmp
       else
@@ -101,14 +101,22 @@ module Pucker
     def bet(min_bet)
       choice = rand
 
-      if (choice < 0.3) || (@stack - min_bet) < (@stack / 2) #FOLD
+      if choice < 0.2 # FOLD
         fold
-      elsif choice < 0.8 #CHECK
+      elsif choice < 0.85 # CHECK
         get_from_stack(min_bet)
-      else #RAISE
-        amount = min_bet
-        amount += rand(@stack-amount+1)
-        get_from_stack(amount)
+      else # RAISE
+        raise_from(min_bet)
+      end
+    end
+
+    def raise_from(min_bet)
+      min_bet = BIG_BLIND if min_bet == 0
+
+      if @stack > 4 * min_bet
+        get_from_stack(2 * min_bet)
+      else # ALLIN
+        get_from_stack(@stack)
       end
     end
   end
