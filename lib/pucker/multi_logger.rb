@@ -4,15 +4,15 @@ require 'forwardable'
 module Pucker
   class MultiLogger
     extend Forwardable
-    def_delegators :@logger, :info, :error
+    def_delegators :@logger, :info, :error, :debug
 
     def initialize
       if ENV['test']
         log_file = File.open("../test.log", "a")
-        @logger = Logger.new MultiIO.new(log_file)
+        @logger = Logger.new(MultiIO.new(log_file))
       else
         log_file = File.open("../pucker.log", "a")
-        @logger = Logger.new MultiIO.new(STDOUT, log_file)
+        @logger = Logger.new(MultiIO.new(STDOUT, log_file))
       end
     end
 

@@ -17,10 +17,13 @@ module Pucker
       setup_game
       collect_blinds
       deal_flop
+      LOG.debug("FLOP")
       collect_bets
       deal_turn
+      LOG.debug("TURN")
       collect_bets
       deal_river
+      LOG.debug("RIVER")
       collect_bets
 
       if players.eligible.empty?
@@ -31,6 +34,7 @@ module Pucker
       winners = eligible_players_by_rank
       LOG.info("POT: #{pot}")
       LOG.info("TABLE CARDS: #{table_cards.map{|c| c.toString}}")
+      LOG.info("# of 1st winners: #{winners.first.count}")
       LOG.info("WINNERS BEFORE REWARD: #{winners.flatten.map{|p| [p.id, p.hand.toString.strip, p.stack]}}")
       reward winners
       LOG.info("AFTER REWARD: #{players.map{|p| [p.id, p.hand.toString.strip, p.stack]}}\n")
@@ -79,6 +83,7 @@ module Pucker
         last_bet = player.bet_if_active(max_bet)
 
         if last_bet
+          LOG.debug("BET: #{player} - #{last_bet}")
           if last_bet > max_bet #RAISED
             max_bet = last_bet
             last_player = previous_player
