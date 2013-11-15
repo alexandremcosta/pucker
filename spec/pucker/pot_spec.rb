@@ -1,4 +1,5 @@
 require "spec_helper"
+require 'pry'
 
 module Pucker
   describe Pot do
@@ -21,6 +22,45 @@ module Pucker
           populate_two_bets
           pot.add_bet(3, 100)
           pot.all_bets.values.should have(3).bets
+        end
+      end
+    end
+
+    describe "#sum" do
+      before do
+        @pot = Pot.new
+        @other_pot = Pot.new
+        @pot.add_bet(:one, 10)
+        @pot.add_bet(:other, 10)
+        @other_pot.add_bet(:one, 10)
+        @other_pot.add_bet(:another, 10)
+      end
+
+      context "when directed called" do
+        it "should misc too pots" do
+          sum = @pot.sum(@other_pot)
+          sum.all_bets.count.should == 3
+          sum.all_bets[:one].should == 20
+          sum.all_bets[:other].should == 10
+          sum.all_bets[:another].should == 10
+        end
+      end
+
+      context "when called via +=" do
+        it "should misc too pots in place" do
+          @pot += @other_pot
+          @pot.all_bets.count.should == 3
+          @pot.all_bets[:one].should == 20
+          @pot.all_bets[:other].should == 10
+          @pot.all_bets[:another].should == 10
+        end
+      end
+    end
+
+    describe "#total_contributed_by" do
+      context "when player hasnt betted" do
+        it "should return ZERO" do
+          pot.total_contributed_by('new player').should == 0
         end
       end
     end

@@ -10,6 +10,16 @@ module Pucker
       all_bets[player] ||= 0
       all_bets[player] += amount
     end
+
+    def sum(other_pot)
+      new_bets = self.all_bets.merge(other_pot.all_bets) do |player, self_bet, other_bet|
+        self_bet + other_bet
+      end
+      new_pot = Pot.new
+      new_pot.all_bets = new_bets
+      return new_pot
+    end
+    alias :+ :sum
     
     def total_contributed_by(player)
       all_bets[player]
@@ -26,7 +36,7 @@ module Pucker
     end
 
     def reset
-      @all_bets = Hash.new
+      @all_bets = Hash.new(0)
     end
 
     def empty?

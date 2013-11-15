@@ -18,13 +18,13 @@ module Pucker
       collect_blinds
       deal_flop
       LOG.debug("FLOP")
-      collect_bets
+      @pot += collect_bets
       deal_turn
       LOG.debug("TURN")
-      collect_bets
+      @pot += collect_bets
       deal_river
       LOG.debug("RIVER")
-      collect_bets
+      @pot += collect_bets
 
       if players.eligible.empty?
         LOG.error("No eligible players") 
@@ -77,23 +77,30 @@ module Pucker
     def collect_bets
       max_bet = 0
       last_player = previous_player =  players.last
+      round_pot = Pot.new
 
       players.cycle do |player|
         break if !players.has_multiple_active?
         last_bet = player.bet_if_active(max_bet)
 
         if last_bet
-          LOG.debug("BET: #{player} - #{last_bet}")
+
           if last_bet > max_bet #RAISED
             max_bet = last_bet
             last_player = previous_player
           end
-          pot.add_bet(player, last_bet)
+
+          old_bets = round_pot.total_contributed_by(player)
+          player.reward(old_bets)
+          LOG.debug("BET: #{player} - #{last_bet - old_bets}")
+          round_pot.add_bet(player, last_bet - old_bets)
         end
 
         previous_player = player
         break if player == last_player
       end
+
+      return round_pot
     end
 
     def deal_flop

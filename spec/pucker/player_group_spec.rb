@@ -7,7 +7,6 @@ module Pucker
 
     describe "#[]" do
       it "should delegate to container" do
-        puts players.instance_variable_get("@container")
         players[1].should == players.instance_variable_get("@container")[1]
       end
     end

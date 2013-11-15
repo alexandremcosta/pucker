@@ -24,14 +24,11 @@ module Pucker
         before do
           @game  = Game.new
         end
-        it "should delete players with insuficient stack" do
-          first_player = @game.players.first
-          last_player = @game.players.last
-          first_player.stack = 0
-          last_player.stack = 1
+        it "should rebuy players with insuficient stack" do
+          player = @game.players.first
+          player.stack = 0
           @game.send(:prepare_players)
-          @game.players.should_not include(first_player)
-          @game.players.should include(last_player)
+          player.stack.should > 0
         end
         it "should set all players active and remove allin states" do
           first_player = @game.players.first

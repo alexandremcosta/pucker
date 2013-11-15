@@ -101,13 +101,13 @@ module Pucker
   end
 
   describe DummyPlayer do
-    let(:min_value) { 0 }
+    let(:min_value) { 10 }
     let(:p) { DummyPlayer.new(100) }
     subject { p.bet(min_value) }
 
     describe "#bet" do
       context "when he folds" do
-        before { p.should_receive(:rand).and_return(0.2) }
+        before { p.should_receive(:rand).and_return(0.1) }
         it { should be_false }
       end
       context "when he checks" do
