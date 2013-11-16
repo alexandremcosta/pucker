@@ -14,10 +14,10 @@ module Pucker
 
     describe "#bet_if_active" do
       let(:player) { Player.new }
-      subject { player.bet_if_active(20) }
+      subject { player.bet_if_active(min_bet: 20) }
 
       it "should return what #bet returns" do
-        player.should_receive(:bet).with(20).and_return('any number')
+        player.should_receive(:bet).with(min_bet: 20).and_return('any number')
         subject.should == 'any number'
       end
 
@@ -29,7 +29,7 @@ module Pucker
 
     describe "#bet" do
       it "should check every time" do
-        Player.new.bet(30).should == 30
+        Player.new.bet(min_bet: 30).should == 30
       end
     end
 
@@ -103,7 +103,7 @@ module Pucker
   describe DummyPlayer do
     let(:min_value) { 10 }
     let(:p) { DummyPlayer.new(100) }
-    subject { p.bet(min_value) }
+    subject { p.bet(min_bet: min_value) }
 
     describe "#bet" do
       context "when he folds" do
@@ -115,7 +115,7 @@ module Pucker
         it { should == min_value }
       end
       context "when he raises" do
-        before { p.stub(:rand).and_return(0.9, 50) }
+        before { p.stub(:rand).and_return(0.9) }
         it "should return a value between min_value and stack" do
           subject.should be_between(min_value, p.stack)
         end

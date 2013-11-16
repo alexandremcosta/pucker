@@ -28,11 +28,12 @@ module Pucker
       end
     end
 
-    def bet_if_active(min_bet)
-      bet(min_bet) if active?
+    def bet_if_active(opts={})
+      bet(opts) if active?
     end
 
-    def bet(min_bet)
+    def bet(opts={})
+      min_bet = opts[:min_bet]
       get_from_stack(min_bet)
     end
 
@@ -98,7 +99,9 @@ module Pucker
   end
 
   class DummyPlayer < Player
-    def bet(min_bet)
+    def bet(opts={})
+      min_bet = opts[:min_bet]
+
       choice = rand
 
       if min_bet > 0 && choice < 0.2 # FOLD
