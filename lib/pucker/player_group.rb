@@ -10,7 +10,8 @@ module Pucker
     def initialize(count=NUM_PLAYERS, amount=STACK)
       @count = count.is_a?(Integer) ? count : NUM_PLAYERS
       @amount = amount.is_a?(Integer) ? amount : STACK
-      @container = Array.new(@count) { player_source.call(@amount) }
+      @container = Array.new(@count-1) { player_source.call(@amount) }
+      @container << SimpleBnPlayer.new(@amount)
     end
 
     def set_hands(dealer)

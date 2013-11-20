@@ -96,6 +96,15 @@ module Pucker
     def allin!
       @allin = true
     end
+    def raise_from(min_bet)
+      min_bet = BIG_BLIND if min_bet == 0
+
+      if stack > (4 * min_bet)
+        get_from_stack(2 * min_bet)
+      else # ALLIN
+        get_from_stack(stack)
+      end
+    end
   end
 
   class DummyPlayer < Player
@@ -110,16 +119,6 @@ module Pucker
         get_from_stack(min_bet)
       else # RAISE
         raise_from(min_bet)
-      end
-    end
-
-    def raise_from(min_bet)
-      min_bet = BIG_BLIND if min_bet == 0
-
-      if stack > (4 * min_bet)
-        get_from_stack(2 * min_bet)
-      else # ALLIN
-        get_from_stack(stack)
       end
     end
   end

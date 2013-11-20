@@ -6,8 +6,8 @@ module Pucker
   describe Player do
     describe "#initialize" do
       it "should have a uniq id" do
-        ids = 1000.times.map { Player.new.id }
-        ids.uniq.should have(1000).strings
+        ids = 100.times.map { Player.new.id }
+        ids.uniq.should have(100).strings
         ids.uniq.should == ids
       end
     end

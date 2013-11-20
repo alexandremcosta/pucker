@@ -2,6 +2,7 @@ require_relative 'dealer'
 require_relative 'player_group'
 require_relative 'pot'
 require_relative 'multi_logger'
+require_relative 'bn_players'
 
 module Pucker
   class Game
@@ -81,7 +82,7 @@ module Pucker
 
       players.cycle do |player|
         break if !players.has_multiple_active?
-        last_bet = player.bet_if_active(min_bet: max_bet)
+        last_bet = player.bet_if_active(min_bet: max_bet, table_cards: table_cards)
 
         if last_bet
 
