@@ -33,6 +33,7 @@ module Pucker
         if p.stack <= 0
           p.stack = @amount
           LOG.info("#{p.id} lost")
+          STATISTIC.increase_losses(p)
         end
       end
       @container.each{|p| p.reset_round_state}
