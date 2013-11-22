@@ -11,7 +11,7 @@ module Pucker
       @count = count.is_a?(Integer) ? count : NUM_PLAYERS
       @amount = amount.is_a?(Integer) ? amount : STACK
       @container = Array.new(@count-1) { player_source.call(@amount) }
-      @container << BnPlayer.new(@amount)
+      @container << BestBnPlayer.new(@amount)
     end
 
     def set_hands(dealer)

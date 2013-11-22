@@ -134,7 +134,30 @@ module Pucker
     end
 
     def build_bayesian_network
-      @net = SmartBn.get
+      @net = GoodBn.get
+    end
+  end
+
+  class BestBnPlayer < BnPlayer
+    protected
+    def build_evidence(opts)
+      hr = discrete_hand_rank(opts[:table_cards])
+      mb = discrete_min_bet(opts[:min_bet])
+      position = discrete_position(opts[:total_players], opts[:index])
+
+      evidence = {min_bet: mb, hand_rank: hr, position: position}
+      puts evidence
+      return evidence
+    end
+
+    def discrete_position(total, index)
+      return :high if index == total - 1
+      return :high if total > 3 && index >= total - 2
+      return :low
+    end
+
+    def build_bayesian_network
+      @net = BestBn.get
     end
   end
 end
