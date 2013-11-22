@@ -5,13 +5,13 @@ module Pucker
   class PlayerGroup
     include Enumerable
     extend Forwardable
-    def_delegators :@container, :each, :map, :[], :rotate, :rotate!, :size, :last, :first
+    def_delegators :@container, :each, :map, :[], :rotate, :rotate!, :size, :last, :first, :index
 
     def initialize(count=NUM_PLAYERS, amount=STACK)
       @count = count.is_a?(Integer) ? count : NUM_PLAYERS
       @amount = amount.is_a?(Integer) ? amount : STACK
       @container = Array.new(@count-1) { player_source.call(@amount) }
-      @container << SimpleBnPlayer.new(@amount)
+      @container << BnPlayer.new(@amount)
     end
 
     def set_hands(dealer)
@@ -41,7 +41,7 @@ module Pucker
 
     private
     def player_source
-      @player_source ||= DummyPlayer.public_method(:new)
+      @player_source ||= SimpleBnPlayer.public_method(:new)
     end
   end
 end

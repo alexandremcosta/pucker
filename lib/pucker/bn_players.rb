@@ -1,5 +1,6 @@
 require 'sbn'
 require_relative 'players'
+require_relative 'bayesian_networks'
 
 module Pucker
   class SimpleBnPlayer < Player
@@ -14,14 +15,14 @@ module Pucker
 
       if chance > 0.75 && opts[:min_bet] < (8 * BIG_BLIND)
         raise_from(opts[:min_bet])
-      elsif chance > 0.5
+      elsif chance > 0.5 || opts[:min_bet] == 0
         get_from_stack(opts[:min_bet])
       else
         fold
       end
     end
 
-    private
+    protected
     def build_evidence(opts)
       hr = discrete_hand_rank(opts[:table_cards])
       mb = discrete_min_bet(opts[:min_bet])
@@ -33,7 +34,6 @@ module Pucker
       min_bet > 0 ? :over_zero : :zero
     end
 
-    protected
     def chance_to_win(evidence)
       @net.set_evidence(evidence)
       @net.query_variable(:result)[:true]
@@ -53,7 +53,7 @@ module Pucker
       hr = hand_rank(table_cards)
 
       if hr - tr > 10000
-        if hr >= 1113879 # triple of two
+        if hr >= 742755 # two pairs of two and three 1113879 # triple of two
           return :high
         elsif hr >= 371293 # pair of two
           return :avg
@@ -64,12 +64,77 @@ module Pucker
     end
 
     def build_bayesian_network
-      @net = Sbn::Net.new("Pucker")
-      min_bet = Sbn::Variable.new(@net, :min_bet, [0.5, 0.5], [:zero, :over_zero])
-      hand_rank = Sbn::Variable.new(@net, :hand_rank, [0.3, 0.6, 0.1], [:low, :avg, :high])
-      result = Sbn::Variable.new(@net, :result, [0.6,0.4,0.8,0.2,0.9,0.1,0.1,0.9,0.6,0.4,0.9,0.1])
-      min_bet.add_child(result)
-      hand_rank.add_child(result)
+      @net = SimpleBn.get
+    end
+  end
+
+  class BnPlayer < SimpleBnPlayer
+    def bet(opts={})
+      evidence = build_evidence(opts)
+      chance = chance_to_win(evidence)
+
+      if chance > 0.7 && opts[:min_bet] < (12 * BIG_BLIND)
+        raise_from(opts[:min_bet] * 2)
+      elsif chance > 0.40 || opts[:min_bet] == 0
+        get_from_stack(opts[:min_bet])
+      else
+        fold
+      end
+    end
+
+    protected
+    def discrete_hand_rank(table_cards)
+      tr = table_rank(table_cards)
+      hr = hand_rank(table_cards)
+
+      if hr - tr > 10000
+        if hr >= 742755 # two pairs of two and three # 1113879 # triple of two
+          return :high
+        elsif hr >= 386672 # pair of nines
+          return :avg
+        end
+      end
+
+      return :low
+    end
+
+    def discrete_table_rank(table_cards)
+      tr = table_rank(table_cards)
+      if tr >= 371293 # pair of two
+        return :high
+      else
+        return :low
+      end
+    end
+
+    def discrete_min_bet(min_bet)
+      if min_bet == 0
+        :zero
+      elsif min_bet >= 3*BIG_BLIND
+        :high
+      else
+        :low
+      end
+    end
+
+    def build_evidence(opts)
+      hr = discrete_hand_rank(opts[:table_cards])
+      tr = discrete_table_rank(opts[:table_cards])
+      mb = discrete_min_bet(opts[:min_bet])
+      position = discrete_position(opts[:total_players], opts[:index])
+
+      mb = :low if mb == :zero && position == :bad
+
+      {min_bet: mb, hand_rank: hr, table_rank: tr}
+    end
+
+    def discrete_position(total, index)
+      return :bad if (index == 0 || index == 1 || index == 2) && total >= 4
+      return :good
+    end
+
+    def build_bayesian_network
+      @net = SmartBn.get
     end
   end
 end

@@ -82,7 +82,7 @@ module Pucker
 
       players.cycle do |player|
         break if !players.has_multiple_active?
-        last_bet = player.bet_if_active(min_bet: max_bet, table_cards: table_cards)
+        last_bet = player.bet_if_active(min_bet: max_bet, table_cards: table_cards, total_players: players.eligible.count, index: players.eligible.index(player))
 
         if last_bet
 
