@@ -139,6 +139,27 @@ module Pucker
   end
 
   class BestBnPlayer < BnPlayer
+    def bet(opts={})
+      evidence = build_evidence(opts)
+      chance = chance_to_win(evidence)
+
+      if chance > 0.9 || (chance > 0.75 && hand_rank(opts[:table_cards]) >= 1113879)
+        raise_from(opts[:min_bet] * 4)
+      elsif chance > 0.7 && opts[:min_bet] < (12 * BIG_BLIND)
+        raise_from(opts[:min_bet] * 2)
+      elsif chance > 0.45 || opts[:min_bet] == 0
+        get_from_stack(opts[:min_bet])
+      else
+        fold
+      end
+    end
+
+    def chance_to_win(evidence)
+      a = super
+      puts 'Chance: ' + a.to_s
+      return a
+    end
+
     protected
     def build_evidence(opts)
       hr = discrete_hand_rank(opts[:table_cards])

@@ -43,7 +43,7 @@ module Pucker
         @@net = Sbn::Net.new("position_bet_hand_rank")
         min_bet = Sbn::Variable.new(@@net, :min_bet, [0.3, 0.4, 0.3], [:high, :low, :zero])
         position = Sbn::Variable.new(@@net, :position, [0.2, 0.8], [:high, :low])
-        scenario = Sbn::Variable.new(@@net, :scenario, [0.1, 0.2, 0.7, 0.0, 0.1, 0.9, 0.7, 0.2, 0.1, 0.2, 0.5, 0.3, 0.95, 0.05, 0.0, 0.2, 0.6, 0.2], [:good, :medium, :bad])
+        scenario = Sbn::Variable.new(@@net, :scenario, [0.1, 0.2, 0.7, 0.0, 0.1, 0.9, 0.3, 0.6, 0.1, 0.2, 0.5, 0.3, 0.95, 0.05, 0.0, 0.2, 0.6, 0.2], [:good, :medium, :bad])
         min_bet.add_child(scenario)
         position.add_child(scenario)
 
