@@ -1,5 +1,8 @@
 ENV['test'] = 'true'
 
+require 'simplecov'
+SimpleCov.start
+
 require 'pucker'
 
 RSpec.configure do |config|
