@@ -1,11 +1,11 @@
 pucker
 ======
 
-#### Pucker is a No Limit Texas Hold'em emulator, together with a collection
-of four different players, that can be used to play against each other.
+#### Pucker is a No Limit Texas Hold'em emulator, together with a collection of four different players, that can be used to play against each other.
 
-The different players can be found on players.rb and bn_players.rb. On
-the first file, you will find trivial deterministic players: one that
+The different players can be found on players.rb and bn_players.rb.
+
+On the first file, you will find trivial deterministic players: one that
 checks everytime (Player), and one that plays randomly (DummyPlayer). On
 the second one, you will find players modeled after bayesian networks.
 
