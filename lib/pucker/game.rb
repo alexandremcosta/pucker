@@ -39,6 +39,7 @@ module Pucker
       LOG.info("WINNERS BEFORE REWARD: #{winners.flatten.map{|p| [p.id, p.hand.toString.strip, p.stack]}}")
       reward winners
       LOG.info("AFTER REWARD: #{players.map{|p| [p.id, p.hand.toString.strip, p.stack]}}\n")
+      register_statistic
       return true
     end
 
@@ -141,6 +142,13 @@ module Pucker
           return if pot.empty?
         end
       end
+    end
+
+    def register_statistic
+      players.each do |p|
+        STATISTIC.increase_high_stack(p) if p.stack > STACK
+      end
+      STATISTIC.increase_table_king(players.get_table_king)
     end
   end
 end

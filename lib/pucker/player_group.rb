@@ -39,6 +39,10 @@ module Pucker
       @container.each{|p| p.reset_round_state}
     end
 
+    def get_table_king
+      @container.max_by{ |p| p.stack }
+    end
+
     private
     def player_source
       @player_source ||= SimpleBnPlayer.public_method(:new)

@@ -8,7 +8,7 @@ module Pucker
 
     def initialize
       if ENV['test']
-        log_file = File.open("../test.log", "a")
+        log_file = File.open("./test.log", "a")
         @logger = Logger.new(MultiIO.new(log_file))
       else
         log_file = File.open("../pucker.log", "a")
