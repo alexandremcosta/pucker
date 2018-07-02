@@ -14,18 +14,18 @@ project can be found on doc/final_report.pdf.
 
 This is my final graduation project for the Computer Engeneer bac. degree at PUC-Rio university.
 
-To play around in IRB, you must change to `lib/` directory and call `irb`:
+To play around in IRB (interactive Ruby shell):
 ```
-cd lib/
-irb
-  > require 'pucker'
+$ git clone https://github.com/alexandremcosta/pucker.git
+$ cd pucker
+$ irb
+  > require './lib/pucker'
   > g = Pucker::Game.new
   > g.play
 ```
 
-To execute tests, you must be in root directory, install bundler and rspec:
+To execute tests, you must be in project root directory, install bundler and rspec:
 ```
-cd /[PROGRAMMING_FOLDER]/pucker/
 gem install bundler
 bundle install
 ```
