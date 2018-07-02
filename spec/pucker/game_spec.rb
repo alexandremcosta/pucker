@@ -6,12 +6,12 @@ module Pucker
     describe "#initialize" do
       it "should have 5 players by default" do
         game = Game.new
-        game.players.should have(5).items
+        expect(game.players.size).to be 5
       end
 
       it "should allow definition of number of players" do
         game = Game.new(2)
-        game.players.should have(2).items
+        expect(game.players.size).to be 2
       end
     end
 
@@ -28,7 +28,7 @@ module Pucker
           player = @game.players.first
           player.stack = 0
           @game.send(:prepare_players)
-          player.stack.should > 0
+          expect(player.stack).to be > 0
         end
         it "should set all players active and remove allin states" do
           first_player = @game.players.first
@@ -37,13 +37,13 @@ module Pucker
           last_player.send(:allin!)
 
           @game.send(:prepare_players)
-          first_player.active?.should be_true
-          last_player.allin?.should be_false
+          expect(first_player).to be_active
+          expect(last_player).not_to be_allin
         end
         it "should rotate players" do
           second_player = @game.players[1]
           @game.send(:prepare_players)
-          @game.players.first.should == second_player
+          expect(@game.players.first).to be second_player
         end
       end
 
@@ -54,20 +54,22 @@ module Pucker
         let(:game) { Game.new(3, 1000) }
 
         before do
-          game.players[0].stub(:hand_rank).and_return(10)
-          game.players[1].stub(:hand_rank).and_return(2)
-          game.players[2].stub(:hand_rank).and_return(10)
+          allow(game.players[0]).to receive(:hand_rank).and_return(10)
+          allow(game.players[1]).to receive(:hand_rank).and_return(2)
+          allow(game.players[2]).to receive(:hand_rank).and_return(10)
           pot = Pot.new
           pot.add_bet(game.players[0], game.players[0].get_from_stack(100))
           pot.add_bet(game.players[1], game.players[1].get_from_stack(80))
           pot.add_bet(game.players[2], game.players[2].get_from_stack(20))
-          game.stub(:pot).and_return(pot)
+          allow(game).to receive(:pot).and_return(pot)
         end
 
         describe "#eligible_players_by_rank" do
           it "sort players" do
-            game.send(:eligible_players_by_rank).first.first.should == game.players[2]
-            game.send(:eligible_players_by_rank).last.first.should == game.players[1]
+            tied_player1 = game.send(:eligible_players_by_rank).first.first
+            tied_player2 = game.send(:eligible_players_by_rank).last.first
+            expect(tied_player1).to be game.players[2]
+            expect(tied_player2).to be game.players[1]
           end
         end
 
@@ -75,9 +77,9 @@ module Pucker
           it "rewards players" do
             eligible = game.send(:eligible_players_by_rank)
             game.send(:reward, eligible)
-            game.players[0].stack.should == 1070
-            game.players[1].stack.should == 920
-            game.players[2].stack.should == 1010
+            expect(game.players[0].stack).to be 1070
+            expect(game.players[1].stack).to be 920
+            expect(game.players[2].stack).to be 1010
           end
         end
       end

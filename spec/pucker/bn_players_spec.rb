@@ -8,30 +8,27 @@ module Pucker
 
     describe "#bet" do
       context "when has low hand" do
-        before do 
+        before do
           player.set_hand(Card.new(6), Card.new(7))
           @table_cards = [Card.new(13), Card.new(27), Card.new(29)]
         end
 
         context "when scenario is bad" do
           it "should fold" do
-            player.bet(min_bet: 80,
-                       table_cards: @table_cards,
-                       total_players: 5, index: 1).should be_false
+            bet = player.bet(min_bet: 80, table_cards: @table_cards, total_players: 5, index: 1)
+            expect(bet).to be false
           end
         end
         context "when scenario is medium" do
           it "should fold" do
-            player.bet(min_bet: 40,
-                       table_cards: @table_cards,
-                       total_players: 5, index: 4).should be_false
+            bet = player.bet(min_bet: 40, table_cards: @table_cards, total_players: 5, index: 4)
+            expect(bet).to be false
           end
         end
         context "when scenario is good" do
           it "should raise" do
-            player.bet(min_bet: 0,
-                       table_cards: @table_cards,
-                       total_players: 5, index: 4).should > 0
+            bet = player.bet(min_bet: 0, table_cards: @table_cards, total_players: 5, index: 4)
+            expect(bet).to be > 0
           end
         end
       end
@@ -43,26 +40,20 @@ module Pucker
 
         context "when scenario is bad" do
           it "should fold" do
-            player.bet(min_bet: 80,
-                       table_cards: @table_cards,
-                       total_players: 5,
-                       index: 1).should be_false
+            bet = player.bet(min_bet: 80, table_cards: @table_cards, total_players: 5, index: 1)
+            expect(bet).to be false
           end
         end
         context "when scenario is medium" do
           it "should fold" do
-            player.bet(min_bet: 40,
-                       table_cards: @table_cards,
-                       total_players: 5,
-                       index: 4).should be_false
+            bet = player.bet(min_bet: 40, table_cards: @table_cards, total_players: 5, index: 4)
+            expect(bet).to be false
           end
         end
         context "when scenario is good" do
           it "should raise" do
-            player.bet(min_bet: 0,
-                       table_cards: @table_cards,
-                       total_players: 5,
-                       index: 4).should > 0
+            bet = player.bet(min_bet: 0, table_cards: @table_cards, total_players: 5, index: 4)
+            expect(bet).to be > 0
           end
         end
       end
@@ -73,26 +64,20 @@ module Pucker
         end
         context "when scenario is bad" do
           it "should check" do
-            player.bet(min_bet: 80,
-                       table_cards: @table_cards,
-                       total_players: 5,
-                       index: 1).should == 80
+            bet = player.bet(min_bet: 80, table_cards: @table_cards, total_players: 5, index: 1)
+            expect(bet).to be 80
           end
         end
         context "when scenario is medium" do
           it "should raise" do
-            player.bet(min_bet: 40,
-                       table_cards: @table_cards,
-                       total_players: 5,
-                       index: 4).should > 40
+            bet = player.bet(min_bet: 40, table_cards: @table_cards, total_players: 5, index: 4)
+            expect(bet).to be > 40
           end
         end
         context "when scenario is good" do
           it "should raise" do
-            player.bet(min_bet: 0,
-                       table_cards: @table_cards,
-                       total_players: 5,
-                       index: 4).should > 0
+            bet = player.bet(min_bet: 0, table_cards: @table_cards, total_players: 5, index: 4)
+            expect(bet).to be > 0
           end
         end
       end
@@ -108,18 +93,21 @@ module Pucker
 
         context "when scenario is bad" do
           it "should fold" do
-            player.bet(min_bet: 80, table_cards: []).should be_false
+            bet = player.bet(min_bet: 80, table_cards: [])
+            expect(bet).to be false
           end
         end
         context "when scenario is medium" do
           it "should fold" do
-            player.bet(min_bet: 40, table_cards: []).should be_false
+            bet = player.bet(min_bet: 40, table_cards: [])
+            expect(bet).to be false
           end
         end
         context "when scenario is good" do
           #if position is good and min_bet = 0 => scenario IS good
           it "should raise" do
-            player.bet(min_bet: 0, table_cards: []).should > 0
+            bet = player.bet(min_bet: 0, table_cards: [])
+            expect(bet).to be > 0
           end
         end
       end
@@ -131,21 +119,21 @@ module Pucker
 
         context "when scenario is bad" do
           it "should fold" do
-            player.bet(min_bet: 80,
-                       table_cards: @table_cards).should be_false
+            bet = player.bet(min_bet: 80, table_cards: @table_cards)
+            expect(bet).to be false
           end
         end
         context "when scenario is medium" do
           it "should fold" do
-            player.bet(min_bet: 40,
-                       table_cards: @table_cards).should be_false
+            bet = player.bet(min_bet: 40, table_cards: @table_cards)
+            expect(bet).to be false
           end
         end
         context "when scenario is good" do
           #if position is good and min_bet = 0 => scenario IS good
           it "should raise" do
-            player.bet(min_bet: 0,
-                       table_cards: @table_cards).should > 0
+            bet = player.bet(min_bet: 0, table_cards: @table_cards)
+            expect(bet).to be > 0
           end
         end
       end
@@ -156,20 +144,20 @@ module Pucker
         end
         context "when scenario is bad" do
           it "should check" do
-            player.bet(min_bet: 80,
-                       table_cards: @table_cards).should == 80
+            bet = player.bet(min_bet: 80, table_cards: @table_cards)
+            expect(bet).to be 80
           end
         end
         context "when scenario is medium" do
           it "should raise" do
-            player.bet(min_bet: 40,
-                       table_cards: @table_cards).should > 40
+            bet = player.bet(min_bet: 40, table_cards: @table_cards)
+            expect(bet).to be > 40
           end
         end
         context "when scenario is good" do
           it "should raise" do
-            player.bet(min_bet: 0,
-                       table_cards: @table_cards).should > 0
+            bet = player.bet(min_bet: 0, table_cards: @table_cards)
+            expect(bet).to be > 0
           end
         end
       end
@@ -183,12 +171,14 @@ module Pucker
         before { player.set_hand(Card.new(6), Card.new(7)) }
         context "when min_bet equals zero" do
           it "should check" do
-            player.bet(min_bet: 0, table_cards: [], num_players: 2).should == 0
+            bet = player.bet(min_bet: 0, table_cards: [], num_players: 2)
+            expect(bet).to be 0
           end
         end
         context "when min_bet greater than zero" do
           it "should fold" do
-            player.bet(min_bet: 30, table_cards: [], num_players: 2).should be_false
+            bet = player.bet(min_bet: 30, table_cards: [], num_players: 2)
+            expect(bet).to be false
           end
         end
       end
@@ -197,12 +187,14 @@ module Pucker
         before { player.set_hand(Card.new(0), Card.new(13)) } # pair of two
         context "when min_bet equals zero" do
           it "should raise" do
-            player.bet(min_bet: 0, table_cards: [], num_players: 2).should > 0
+            bet = player.bet(min_bet: 0, table_cards: [], num_players: 2)
+            expect(bet).to be > 0
           end
         end
         context "when min_bet greater than zero" do
           it "should check" do
-            player.bet(min_bet: 30, table_cards: [], num_players: 2).should == 30
+            bet = player.bet(min_bet: 30, table_cards: [], num_players: 2)
+            expect(bet).to be 30
           end
         end
       end
@@ -214,12 +206,14 @@ module Pucker
         end
         context "when min_bet equals zero" do
           it "should raise" do
-            player.bet(min_bet: 0, table_cards: @table_cards, num_players: 2).should > 0
+            bet = player.bet(min_bet: 0, table_cards: @table_cards, num_players: 2)
+            expect(bet).to be > 0
           end
         end
         context "when min_bet greater than zero" do
           it "should raise" do
-            player.bet(min_bet: 30, table_cards: @table_cards, num_players: 2).should > 30
+            bet = player.bet(min_bet: 30, table_cards: @table_cards, num_players: 2)
+            expect(bet).to be > 30
           end
         end
       end

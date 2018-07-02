@@ -7,7 +7,7 @@ module Pucker
 
     describe "#[]" do
       it "should delegate to container" do
-        players[1].should == players.instance_variable_get("@container")[1]
+        expect(players[1]).to be players.instance_variable_get("@container")[1]
       end
     end
 
@@ -15,7 +15,7 @@ module Pucker
       it "should give 2 cards to each player" do
         dealer = OpenStruct.new(deal: :card)
         players.each do |p|
-          p.should_receive(:set_hand).with(:card, :card)
+          expect(p).to receive(:set_hand).with(:card, :card)
         end
         players.set_hands(dealer)
       end
@@ -25,7 +25,7 @@ module Pucker
       it "shouldnt change players size" do
         size = players.size
         players.reset
-        players.size.should == size
+        expect(players.size).to be size
       end
 
       context "when players have ZERO stack" do
@@ -34,7 +34,7 @@ module Pucker
           players.last.stack = 0
           players.reset
           players.each do |player|
-            player.stack.should > 0
+            expect(player.stack).to be > 0
           end
         end
       end
