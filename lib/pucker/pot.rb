@@ -26,7 +26,7 @@ module Pucker
       return new_pot
     end
     alias :+ :sum
-    
+
     def total_contributed_by(player)
       all_bets[player]
     end

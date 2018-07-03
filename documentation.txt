@@ -6,162 +6,164 @@ Pucker::BestBnPlayer
   #bet
     when has low hand
       when scenario is bad
-        should fold
+[32m        should fold[0m
       when scenario is medium
-        should fold
+[32m        should fold[0m
       when scenario is good
-        should raise
+[32m        should raise[0m
     when has avg hand
       when scenario is bad
-        should fold
+[32m        should fold[0m
       when scenario is medium
-        should fold
+[32m        should fold[0m
       when scenario is good
-        should raise
+[32m        should raise[0m
     when has high hand
       when scenario is bad
-        should check
+[32m        should check[0m
       when scenario is medium
-        should raise
+[32m        should raise[0m
       when scenario is good
-        should raise
+[32m        should raise[0m
 
 Pucker::BnPlayer
   #bet
     when has low hand
       when scenario is bad
-        should fold
+[32m        should fold[0m
       when scenario is medium
-        should fold
+[32m        should fold[0m
       when scenario is good
-        should raise
+[32m        should raise[0m
     when has avg hand
       when scenario is bad
-        should fold
+[32m        should fold[0m
       when scenario is medium
-        should fold
+[32m        should fold[0m
       when scenario is good
-        should raise
+[32m        should raise[0m
     when has high hand
       when scenario is bad
-        should check
+[32m        should check[0m
       when scenario is medium
-        should raise
+[32m        should raise[0m
       when scenario is good
-        should raise
+[32m        should raise[0m
 
 Pucker::SimpleBnPlayer
   #bet
     when has low hand
       when min_bet equals zero
-        should check
+[32m        should check[0m
       when min_bet greater than zero
-        should fold
+[32m        should fold[0m
     when has avg hand
       when min_bet equals zero
-        should raise
+[32m        should raise[0m
       when min_bet greater than zero
-        should check
+[32m        should check[0m
     when has high hand
       when min_bet equals zero
-        should raise
+[32m        should raise[0m
       when min_bet greater than zero
-        should raise
+[32m        should raise[0m
+
+Pucker::Dealer
+  #deal
+[32m    deals cards[0m
+[32m    deals 52 different cards[0m
+[32m    doesn't deal 53 cards[0m
+  #reset
+[32m    allows dealer to continue dealing[0m
+[32m    should deal cards in different order[0m
+
+Pucker::Game
+  #initialize
+[32m    should have 5 players by default[0m
+[32m    should allow definition of number of players[0m
+  #collect_bets
+[33m    collect bets (PENDING: Not yet implemented)[0m
+  private methods
+    #prepare_players
+[32m      should rebuy players with insuficient stack[0m
+[32m      should set all players active and remove allin states[0m
+[32m      should rotate players[0m
+    integration tests for rewards
+      #eligible_players_by_rank
+[32m        sort players[0m
+      reward eligible_players_by_rank
+[32m        rewards players[0m
+
+Pucker::PlayerGroup
+  #[]
+[32m    should delegate to container[0m
+  #set_hands
+[32m    should give 2 cards to each player[0m
+  #reset
+[32m    shouldnt change players size[0m
+    when players have ZERO stack
+[32m      should increase back its stack[0m
 
 Pucker::Player
   #initialize
-    should have a uniq id
+[32m    should have a uniq id[0m
   #bet_if_active
-    should return what #bet returns
+[32m    should return what #bet returns[0m
     when player is NOT active
-      should be false
+[32m      should be falsey[0m
   #bet
-    should check every time
+[32m    should check every time[0m
   #get_from_stack
     when player has more
-      should get amount
+[32m      should get amount[0m
     when player has less
-      should zero stack
-      should desactivate player
+[32m      should zero stack[0m
+[32m      should desactivate player[0m
   #set_hand
-    should put 2 cards on player's hand
+[32m    should put 2 cards on player's hand[0m
   #hand_rank
-    should rank players hand according to table cards
-    shouldnt call HandEvaluator again if table cards hasnt changed
+[32m    should rank players hand according to table cards[0m
+[32m    shouldnt call HandEvaluator again if table cards hasnt changed[0m
   protected methods
     #full_hand
-      should misc players and table cards
+[32m      should misc players and table cards[0m
 
 Pucker::DummyPlayer
   #bet
     when he folds
-      should be false
+[32m      should equal false[0m
     when he checks
-      should == 10
+[32m      should equal 10[0m
     when he raises
-      should return a value between min_value and stack
+[32m      should return a value between min_value and stack[0m
 
 Pucker::Pot
   #all_bets
-    should return a hash
+[32m    should return a hash[0m
   #add_bet
     when player hasnt betted yet
-      should increase the number of contributors
+[32m      should increase the number of contributors[0m
   #sum
     when directed called
-      should misc too pots
+[32m      should misc too pots[0m
     when called via +=
-      should misc too pots in place
+[32m      should misc too pots in place[0m
   #total_contributed_by
     when player hasnt betted
-      should return ZERO
+[32m      should return ZERO[0m
   #empty
-    should be empty when initialized
-    should be empty when there arent bets
+[32m    should be empty when initialized[0m
+[32m    should be empty when there arent bets[0m
   #get_from_all
-    should get an amount from every players bet
+[32m    should get an amount from every players bet[0m
 
-Pucker::PlayerGroup
-  #[]
-    should delegate to container
-  #set_hands
-    should give 2 cards to each player
-  #reset
-    shouldnt change players size
-    when players have ZERO stack
-      should increase back its stack
+Pending: (Failures listed here are expected and do not affect your suite's status)
+[33m
+  1) Pucker::Game#collect_bets collect bets[0m
+     [36m# Not yet implemented[0m
+[36m     # ./spec/pucker/game_spec.rb:19
+[0m
 
-Pucker::Game
-  #initialize
-    should have 5 players by default
-    should allow definition of number of players
-  #collect_bets
-    collect bets (PENDING: Not yet implemented)
-  private methods
-    #prepare_players
-      should rebuy players with insuficient stack
-      should set all players active and remove allin states
-      should rotate players
-    integration tests for rewards
-      #eligible_players_by_rank
-        sort players
-      reward eligible_players_by_rank
-        rewards players
+Finished in 7.53 seconds (files took 1.68 seconds to load)
+[33m63 examples, 0 failures, 1 pending[0m
 
-Pucker::Dealer
-  #deal
-    deals cards
-    deals 52 different cards
-    doesn't deal 53 cards
-  #reset
-    allows dealer to continue dealing
-    should deal cards in different order
-
-Pending:
-  Pucker::Game#collect_bets collect bets
-    # Not yet implemented
-    # ./spec/pucker/game_spec.rb:19
-
-Finished in 10.1 seconds
-63 examples, 0 failures, 1 pending
-Coverage report generated for RSpec to /home/alexandre/Dev/pucker/coverage. 619 / 682 LOC (90.76%) covered.

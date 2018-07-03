@@ -2,6 +2,11 @@
   "RSpec": {
     "coverage": {
       "/home/ale/Dev/pucker/lib/pucker/sequence.rb": [
+        null,
+        null,
+        null,
+        null,
+        null,
         1,
         1,
         1,
@@ -12,6 +17,11 @@
         null
       ],
       "/home/ale/Dev/pucker/lib/pucker/players.rb": [
+        null,
+        null,
+        null,
+        null,
+        null,
         1,
         1,
         1,
@@ -139,9 +149,14 @@
         null
       ],
       "/home/ale/Dev/pucker/lib/pucker/bayesian_networks.rb": [
+        null,
+        null,
+        null,
         1,
         null,
         1,
+        null,
+        null,
         1,
         1,
         1,
@@ -154,6 +169,8 @@
         1,
         null,
         43,
+        null,
+        null,
         null,
         null,
         null,
@@ -174,6 +191,8 @@
         1,
         null,
         9,
+        null,
+        null,
         null,
         null,
         null,
@@ -331,6 +350,11 @@
         null
       ],
       "/home/ale/Dev/pucker/lib/pucker/multi_logger.rb": [
+        null,
+        null,
+        null,
+        null,
+        null,
         1,
         1,
         null,
@@ -366,6 +390,11 @@
         null
       ],
       "/home/ale/Dev/pucker/lib/pucker/statistic.rb": [
+        null,
+        null,
+        null,
+        null,
+        null,
         1,
         1,
         1,
@@ -427,6 +456,12 @@
         null
       ],
       "/home/ale/Dev/pucker/lib/pucker/pot.rb": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
         1,
         1,
         1,
@@ -484,6 +519,13 @@
         null
       ],
       "/home/ale/Dev/pucker/lib/pucker/game.rb": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
         1,
         1,
         1,
@@ -640,6 +682,11 @@
         null
       ],
       "/home/ale/Dev/pucker/lib/pucker.rb": [
+        null,
+        null,
+        null,
+        null,
+        null,
         1,
         1,
         1,
@@ -917,6 +964,11 @@
         null
       ],
       "/home/ale/Dev/pucker/lib/pucker/bn_players.rb": [
+        null,
+        null,
+        null,
+        null,
+        null,
         1,
         1,
         1,
@@ -1103,6 +1155,15 @@
         null
       ],
       "/home/ale/Dev/pucker/lib/pucker/player_group.rb": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
         1,
         1,
         null,
@@ -1156,6 +1217,11 @@
         null
       ],
       "/home/ale/Dev/pucker/lib/pucker/dealer.rb": [
+        null,
+        null,
+        null,
+        null,
+        null,
         1,
         1,
         null,
@@ -1182,6 +1248,6 @@
         null
       ]
     },
-    "timestamp": 1530562687
+    "timestamp": 1530636296
   }
 }
