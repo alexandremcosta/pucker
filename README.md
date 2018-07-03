@@ -62,6 +62,11 @@ $ irb
 
 ## Running automated tests
 
+The project currently has around 90% of code coverage from automated tests.  
+A Test-Driven Development approach was applied since the beginning of development.  
+Tests are capable of generating documentation.
+
+To run the tests:
 ```
 $ rspec --format doc # to view tests output as documentation
 $ rspec # to simply run the tests without generating documentation
