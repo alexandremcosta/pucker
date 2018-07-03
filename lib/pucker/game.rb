@@ -1,3 +1,10 @@
+# Author: Alexandre Marangoni Costa
+# Email: alexandremcost at gmail dot com
+# 
+# Responsible for orchestrating the game. Get Cards from the Dealer, give to Players,
+# collect bets from players, reward winners, register logs and statistics and sets everything up
+# for a new round.
+
 require_relative 'dealer'
 require_relative 'player_group'
 require_relative 'pot'

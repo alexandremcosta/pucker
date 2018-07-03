@@ -1,3 +1,8 @@
+# Author: Alexandre Marangoni Costa
+# Email: alexandremcost at gmail dot com
+#
+# Implements trivial players. Player class always checks. DummyPlayer class bets randomly.
+
 require_relative 'sequence'
 require 'java'
 java_import 'table.Hand'

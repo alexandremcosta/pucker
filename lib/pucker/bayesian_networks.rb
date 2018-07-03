@@ -1,6 +1,11 @@
+# Author: Alexandre Marangoni Costa
+# Email: alexandremcost at gmail dot com
+
 require 'sbn'
 
 module Pucker
+
+  # Simple bayesian network: uses minimum bet and hand rank to calculate bet.
   class SimpleBn
     @@net = nil
     def self.get
@@ -16,6 +21,8 @@ module Pucker
     end
   end
 
+  # Good bayesian network: combines minimum bet and table rank to a scenario variable.
+  # Uses the scenario and the hand rank to calculate bet.
   class GoodBn
     @@net = nil
     def self.get
@@ -36,6 +43,8 @@ module Pucker
     end
   end
 
+  # Best bayesian network: combines minimum bet and player position to a scenario variable.
+  # Uses the scenario and the hand rank to calculate bet.
   class BestBn
     @@net = nil
     def self.get

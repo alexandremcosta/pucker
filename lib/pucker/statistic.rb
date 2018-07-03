@@ -1,3 +1,8 @@
+# Author: Alexandre Marangoni Costa
+# Email: alexandremcost at gmail dot com
+#
+# Outputs statistics of the game
+
 module Pucker
   class Statistic
     attr_reader :losses, :high_stack

@@ -1,3 +1,8 @@
+# Author: Alexandre Marangoni Costa
+# Email: alexandremcost at gmail dot com
+#
+# Write logs to a file and to STDOUT
+
 require 'logger'
 require 'forwardable'
 

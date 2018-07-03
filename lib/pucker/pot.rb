@@ -1,3 +1,9 @@
+# Author: Alexandre Marangoni Costa
+# Email: alexandremcost at gmail dot com
+#
+# Pot accumulates every bet a player makes. It knows how to merge itself with another Pot and
+# to reset all bets. It also knows how to print itself.
+
 module Pucker
   class Pot
     attr_accessor :all_bets

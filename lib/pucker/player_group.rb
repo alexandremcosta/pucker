@@ -1,3 +1,12 @@
+# Author: Alexandre Marangoni Costa
+# Email: alexandremcost at gmail dot com
+#
+# Implements a container of players. A PlayerGroup behave similarly Enumerable, which is a
+# tipical Ruby collection design pattern implementation. In adittion, it handles the dealing
+# phase of the game, getting cards from dealer and giving to players. It also knows the
+# eligible players for a round, who is the player with the most amount in stack, and rebuys
+# stack for losers.
+
 require_relative 'players'
 require 'forwardable'
 

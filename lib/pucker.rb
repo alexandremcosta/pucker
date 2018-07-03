@@ -1,3 +1,8 @@
+# Author: Alexandre Marangoni Costa
+# Email: alexandremcost at gmail dot com
+#
+# Main module of the framework, responsible for general configurations.
+
 $CLASSPATH << File.expand_path('../pucker', __FILE__)
 require_relative 'pucker/game'
 require_relative 'pucker/statistic'

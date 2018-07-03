@@ -1,3 +1,8 @@
+# Author: Alexandre Marangoni Costa
+# Email: alexandremcost at gmail dot com
+# 
+# Implementation of players that use Bayesian Networks to play poker.
+
 require 'sbn'
 require_relative 'players'
 require_relative 'bayesian_networks'

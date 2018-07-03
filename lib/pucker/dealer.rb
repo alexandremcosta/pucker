@@ -1,3 +1,8 @@
+# Author: Alexandre Marangoni Costa
+# Email: alexandremcost at gmail dot com
+# 
+# Responsible for dealing and shuffling a deck of cards
+
 require 'java'
 java_import 'table.Deck'
 
