@@ -161,7 +161,7 @@ module Pucker
 
     def chance_to_win(evidence)
       a = super
-      LOG.debug('Chance: ' + a.to_s)
+      # LOG.debug('Chance: ' + a.to_s)
       return a
     end
 
@@ -172,7 +172,7 @@ module Pucker
       position = discrete_position(opts[:total_players], opts[:index])
 
       evidence = {min_bet: mb, hand_rank: hr, position: position}
-      LOG.debug(evidence.to_s)
+      # LOG.debug(evidence.to_s)
       return evidence
     end
 

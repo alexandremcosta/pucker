@@ -35,7 +35,7 @@ module Pucker
       @pot += collect_bets
 
       if players.eligible.empty?
-        LOG.error("No eligible players") 
+        LOG.error("No eligible players")
         return false
       end
 
@@ -43,9 +43,9 @@ module Pucker
       LOG.info("POT: #{pot}")
       LOG.info("TABLE CARDS: #{table_cards.map{|c| c.toString}}")
       LOG.info("# of 1st winners: #{winners.first.count}")
-      LOG.info("WINNERS BEFORE REWARD: #{winners.flatten.map{|p| [p.id, p.hand.toString.strip, p.stack]}}")
+      # LOG.info("WINNERS BEFORE REWARD: #{winners.flatten.map{|p| [p.id, p.hand.toString.strip, p.stack]}}")
       reward winners
-      LOG.info("AFTER REWARD: #{players.map{|p| [p.id, p.hand.toString.strip, p.stack]}}\n")
+      LOG.info("GAME STATE: #{players.map{|p| [p.id, p.hand.toString.strip, p.stack]}}\n")
       register_statistic
       return true
     end

@@ -83,7 +83,7 @@ module Pucker
     end
 
     def to_s
-      "#{id} - #{hand} - #{stack}"
+      "#{id}\t- #{hand} - #{stack}"
     end
 
     protected
