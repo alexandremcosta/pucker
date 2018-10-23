@@ -57,11 +57,11 @@ module Pucker
           allow(game.players[0]).to receive(:hand_rank).and_return(10)
           allow(game.players[1]).to receive(:hand_rank).and_return(2)
           allow(game.players[2]).to receive(:hand_rank).and_return(10)
-          pot = Pot.new
-          pot.add_bet(game.players[0], game.players[0].get_from_stack(100))
-          pot.add_bet(game.players[1], game.players[1].get_from_stack(80))
-          pot.add_bet(game.players[2], game.players[2].get_from_stack(20))
-          allow(game).to receive(:pot).and_return(pot)
+          pot = Pot.new(3)
+          pot.add_bet(0, :flop, game.players[0].get_from_stack(100))
+          pot.add_bet(1, :flop, game.players[1].get_from_stack(80))
+          pot.add_bet(2, :flop, game.players[2].get_from_stack(20))
+          allow(game).to receive(:main_pot).and_return(pot)
         end
 
         describe "#eligible_players_by_rank" do

@@ -2,3 +2,4 @@ UofAHandEval/
 *.swp
 *.log
 .tmp/
+coverage/

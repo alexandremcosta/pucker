@@ -1,9 +1,7 @@
 ENV['test'] = 'true'
 
-require 'simplecov'
-SimpleCov.start
-
 require 'pucker'
+require 'ruby-debug'
 
 RSpec.configure do |config|
   config.filter_run wip: true

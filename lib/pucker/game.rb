@@ -1,3 +1,4 @@
+require 'ruby-debug'
 # Author: Alexandre Marangoni Costa
 # Email: alexandremcost at gmail dot com
 # 
@@ -16,23 +17,24 @@ module Pucker
     attr_reader :players
 
     def initialize(count=NUM_PLAYERS, amount=STACK)
-      count = NUM_PLAYERS unless count.is_a? Integer
-      amount = STACK unless amount.is_a? Integer
       @players = PlayerGroup.new(count, amount)
     end
 
     def play
       setup_game
       collect_blinds
+
       deal_flop
       LOG.debug("FLOP")
-      @pot += collect_bets
+      main_pot.merge(collect_bets)
+
       deal_turn
       LOG.debug("TURN")
-      @pot += collect_bets
+      main_pot.merge(collect_bets)
+
       deal_river
       LOG.debug("RIVER")
-      @pot += collect_bets
+      main_pot.merge(collect_bets)
 
       if players.eligible.empty?
         LOG.error("No eligible players")
@@ -40,8 +42,8 @@ module Pucker
       end
 
       winners = eligible_players_by_rank
-      LOG.info("POT: #{pot}")
-      LOG.info("TABLE CARDS: #{table_cards.map{|c| c.toString}}")
+      LOG.info("POT:\n#{main_pot}")
+      LOG.info("TABLE CARDS: #{@table_cards.map{|c| c.toString}}")
       LOG.info("# of 1st winners: #{winners.first.count}")
       # LOG.info("WINNERS BEFORE REWARD: #{winners.flatten.map{|p| [p.id, p.hand.toString.strip, p.stack]}}")
       reward winners
@@ -55,10 +57,14 @@ module Pucker
       @dealer ||= Dealer.new
     end
 
+    def main_pot
+      @pot ||= Pot.new(@players.size)
+    end
+
     def setup_game
-      table_cards.clear
+      @table_cards = []
+      main_pot.reset
       dealer.reset
-      pot.reset
       prepare_players
     end
 
@@ -68,29 +74,21 @@ module Pucker
       players.set_hands(dealer)
     end
 
-    def pot
-      @pot ||= Pot.new
-    end
-
-    def table_cards
-      @table_cards ||= []
-    end
-
     def collect_blinds
       players.each do |p|
         amount = p.get_from_stack(BIG_BLIND)
-        pot.add_bet(p, amount)
+        main_pot.add_bet(player_position(p), round, amount)
       end
     end
 
     def collect_bets
       max_bet = 0
       last_player = previous_player =  players.last
-      round_pot = Pot.new
+      round_pot = Pot.new(players.size)
 
       players.cycle do |player|
         break if !players.has_multiple_active?
-        last_bet = player.bet_if_active(min_bet: max_bet, table_cards: table_cards, total_players: players.eligible.count, index: players.eligible.index(player))
+        last_bet = player.bet_if_active(min_bet: max_bet, table_cards: @table_cards, total_players: players.eligible.count, index: players.eligible.index(player))
 
         if last_bet
 
@@ -99,10 +97,10 @@ module Pucker
             last_player = previous_player
           end
 
-          old_bets = round_pot.total_contributed_by(player)
+          old_bets = round_pot.total_contributed_by(player_position(player))
           player.reward(old_bets)
           LOG.debug("BET: #{player} - #{last_bet - old_bets}")
-          round_pot.add_bet(player, last_bet - old_bets)
+          round_pot.add_bet(player_position(player), round, last_bet - old_bets)
         end
 
         previous_player = player
@@ -125,15 +123,15 @@ module Pucker
     end
 
     def deal_table_card
-      table_cards << dealer.deal
+      @table_cards << dealer.deal
     end
 
     # according to: http://stackoverflow.com/questions/5462583/poker-side-pot-algorithm
     def eligible_players_by_rank
-      players.eligible.sort_by do |p| p.hand_rank(table_cards)
-      end.reverse.group_by do |p| p.hand_rank(table_cards)
+      players.eligible.sort_by do |p| p.hand_rank(@table_cards)
+      end.reverse.group_by do |p| p.hand_rank(@table_cards)
       end.each do |rank, people|
-        people.sort_by! do |p| pot.total_contributed_by(p) end
+        people.sort_by! do |p| main_pot.total_contributed_by(player_position(p)) end
       end.values
     end
 
@@ -142,11 +140,11 @@ module Pucker
       winners.each do |tied_players|
         while tied_players.any? do
           player = tied_players.first
-          amount = pot.total_contributed_by(player)
-          prize = pot.get_from_all(amount) / tied_players.size
+          amount = main_pot.total_contributed_by(player_position(player))
+          prize = main_pot.get_from_all(amount) / tied_players.size
           tied_players.each do |p| p.reward(prize) end
           tied_players.shift
-          return if pot.empty?
+          return if main_pot.empty?
         end
       end
     end
@@ -156,6 +154,25 @@ module Pucker
         STATISTIC.increase_high_stack(p) if p.stack > STACK
       end
       STATISTIC.increase_table_king(players.get_table_king)
+    end
+
+    def round
+      case @table_cards.size
+      when 0
+        :preflop
+      when 3
+        :flop
+      when 4
+        :turn
+      when 5
+        :river
+      else
+        raise 'invalid table round'
+      end
+    end
+
+    def player_position(player)
+      players.index(player)
     end
   end
 end

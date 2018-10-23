@@ -6,54 +6,79 @@
 
 module Pucker
   class Pot
-    attr_accessor :all_bets
+    attr_accessor :all_bets #todo: protected
 
-    def initialize
+    def initialize(n_players)
+      @n_players = n_players
       reset
     end
 
-    def add_bet(player, amount)
-      all_bets[player] ||= 0
-      all_bets[player] += amount
+    def add_bet(player, round, amount)
+      all_bets[player][round] << amount
     end
 
-    def sum(other_pot)
-      new_bets = self.all_bets.merge(other_pot.all_bets) do |player, self_bet, other_bet|
-        self_bet + other_bet
+    def merge(other_pot)
+      raise 'invalid pot merge' if other_pot.all_bets.size != @all_bets.size
+
+      @all_bets.map!.with_index do |player_bets, index|
+        player_bets.merge(other_pot.all_bets[index])
       end
-      new_pot = Pot.new
-      new_pot.all_bets = new_bets
-      return new_pot
     end
-    alias :+ :sum
 
-    def total_contributed_by(player)
-      all_bets[player]
+    def total_contributed_by(index)
+      total = 0
+      all_bets[index].each do |round, bets|
+        total += bets.sum
+      end
+      total
     end
 
     def get_from_all(amount)
       total = 0
-      all_bets.each do |player, bet|
-        to_sub = if bet < amount then bet else amount  end
-        all_bets[player] -= to_sub
-        total += to_sub
+
+      all_bets.each_with_index do |bets, index|
+        contributed = total_contributed_by(index)
+        to_subtract = [contributed, amount].min
+        get_from(index, to_subtract)
+        total += to_subtract
       end
+
       return total
     end
 
+    def get_from(index, amount)
+      bets = @all_bets[index]
+      bets.keys.reverse.each do |round|
+        break if amount <= 0
+        round_bets = bets[round].sum
+
+        if round_bets >= amount
+          bets[round] = [round_bets - amount]
+          amount = 0
+        else
+          bets[round] = [0]
+          amount = amount - round_bets
+        end
+      end
+    end
+
     def reset
-      @all_bets = Hash.new(0)
+      @all_bets = Array.new(@n_players) { Hash.new {|h, k| h[k] = []} }
     end
 
     def empty?
-      @all_bets.each { |p, b| return false if b > 0 }
+      @all_bets.each do |player_bets|
+        sum = player_bets.values.flatten.sum
+        return false if sum > 0
+      end
+
       return true
     end
 
     def to_s
       str = ''
-      all_bets.each do |player, bet|
-        str << player.id + ': ' + bet.to_s + " | "
+      all_bets.each_with_index do |bet, index|
+        str << "Player position #{index}" + ': ' + bet.to_s + "\n"
       end
       return str
     end
