@@ -33,13 +33,12 @@ module Pucker
       end
     end
 
-    def bet_if_active(opts={})
-      bet(opts) if active?
+    def bet_if_active(state)
+      bet(state) if active?
     end
 
-    def bet(opts={})
-      min_bet = opts[:min_bet]
-      get_from_stack(min_bet)
+    def bet(state)
+      get_from_stack(state.min_bet)
     end
 
     def active?
@@ -60,12 +59,10 @@ module Pucker
       hand.add_card(card2)
     end
 
-    def hand_rank(table_cards)
-      old_table_cards = @table_cards
-      @table_cards = Array.new(table_cards)
-      if old_table_cards != @table_cards
-        @rank = HandEvaluator.rank_hand(full_hand(@table_cards))
-      end
+    def hand_rank(cards)
+      old_cards = @cards
+      @cards    = Array.new(cards)
+      @rank     = HandEvaluator.rank_hand(full_hand(@cards)) if old_cards != @cards
       @rank
     end
 
@@ -75,7 +72,7 @@ module Pucker
 
     def reset_round_state
       @active = true
-      @allin = false
+      @allin  = false
     end
 
     def fold
@@ -92,15 +89,19 @@ module Pucker
       table_cards.each do |card| full_hand.add_card(card) end
       return full_hand
     end
+
     def reset_hand
       @hand = hand.make_empty
     end
+
     def inactive!
       @active = false
     end
+
     def allin!
       @allin = true
     end
+
     def raise_from(min_bet)
       min_bet = BIG_BLIND if min_bet == 0
 
@@ -113,8 +114,8 @@ module Pucker
   end
 
   class DummyPlayer < Player
-    def bet(opts={})
-      min_bet = opts[:min_bet]
+    def bet(state)
+      min_bet = state.min_bet
 
       choice = rand
 

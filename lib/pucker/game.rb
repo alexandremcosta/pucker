@@ -6,6 +6,7 @@ require 'ruby-debug'
 # collect bets from players, reward winners, register logs and statistics and sets everything up
 # for a new round.
 
+require_relative 'state'
 require_relative 'dealer'
 require_relative 'player_group'
 require_relative 'pot'
@@ -88,7 +89,9 @@ module Pucker
 
       players.cycle do |player|
         break if !players.has_multiple_active?
-        last_bet = player.bet_if_active(min_bet: max_bet, table_cards: @table_cards, total_players: players.eligible.count, index: players.eligible.index(player))
+
+        state = State.new(players.eligible.count, players.eligible.index(player), max_bet, @table_cards)
+        last_bet = player.bet_if_active(state)
 
         if last_bet
 

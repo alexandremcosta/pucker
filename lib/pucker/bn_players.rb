@@ -1,3 +1,4 @@
+require 'ruby-debug'
 # Author: Alexandre Marangoni Costa
 # Email: alexandremcost at gmail dot com
 # 
@@ -14,23 +15,23 @@ module Pucker
       build_bayesian_network
     end
 
-    def bet(opts={})
-      evidence = build_evidence(opts)
-      chance = chance_to_win(evidence)
+    def bet(state)
+      evidence = build_evidence(state)
+      chance   = chance_to_win(evidence)
 
-      if chance > 0.75 && opts[:min_bet] < (8 * BIG_BLIND)
-        raise_from(opts[:min_bet])
-      elsif chance > 0.5 || opts[:min_bet] == 0
-        get_from_stack(opts[:min_bet])
+      if chance > 0.75 && state.min_bet < (8 * BIG_BLIND)
+        raise_from(state.min_bet)
+      elsif chance > 0.5 || state.min_bet == 0
+        get_from_stack(state.min_bet)
       else
         fold
       end
     end
 
     protected
-    def build_evidence(opts)
-      hr = discrete_hand_rank(opts[:table_cards])
-      mb = discrete_min_bet(opts[:min_bet])
+    def build_evidence(state)
+      hr = discrete_hand_rank(state.table_cards)
+      mb = discrete_min_bet(state.min_bet)
 
       {min_bet: mb, hand_rank: hr}
     end
@@ -74,14 +75,14 @@ module Pucker
   end
 
   class BnPlayer < SimpleBnPlayer
-    def bet(opts={})
-      evidence = build_evidence(opts)
-      chance = chance_to_win(evidence)
+    def bet(state)
+      evidence = build_evidence(state)
+      chance   = chance_to_win(evidence)
 
-      if chance > 0.7 && opts[:min_bet] < (12 * BIG_BLIND)
-        raise_from(opts[:min_bet] * 2)
-      elsif chance > 0.40 || opts[:min_bet] == 0
-        get_from_stack(opts[:min_bet])
+      if chance > 0.7 && state.min_bet < (12 * BIG_BLIND)
+        raise_from(state.min_bet * 2)
+      elsif chance > 0.40 || state.min_bet == 0
+        get_from_stack(state.min_bet)
       else
         fold
       end
@@ -122,11 +123,11 @@ module Pucker
       end
     end
 
-    def build_evidence(opts)
-      hr = discrete_hand_rank(opts[:table_cards])
-      tr = discrete_table_rank(opts[:table_cards])
-      mb = discrete_min_bet(opts[:min_bet])
-      position = discrete_position(opts[:total_players], opts[:index])
+    def build_evidence(state)
+      hr = discrete_hand_rank(state.table_cards)
+      tr = discrete_table_rank(state.table_cards)
+      mb = discrete_min_bet(state.min_bet)
+      position = discrete_position(state.total_players, state.position)
 
       mb = :low if mb == :zero && position == :bad
 
@@ -144,16 +145,16 @@ module Pucker
   end
 
   class BestBnPlayer < BnPlayer
-    def bet(opts={})
-      evidence = build_evidence(opts)
-      chance = chance_to_win(evidence)
+    def bet(state)
+      evidence = build_evidence(state)
+      chance   = chance_to_win(evidence)
 
-      if chance > 0.9 || (chance > 0.75 && hand_rank(opts[:table_cards]) >= 1113879)
-        raise_from(opts[:min_bet] * 4)
-      elsif chance > 0.7 && opts[:min_bet] < (12 * BIG_BLIND)
-        raise_from(opts[:min_bet] * 2)
-      elsif chance > 0.45 || opts[:min_bet] == 0
-        get_from_stack(opts[:min_bet])
+      if chance > 0.9 || (chance > 0.75 && hand_rank(state.table_cards) >= 1113879)
+        raise_from(state.min_bet * 4)
+      elsif chance > 0.7 && state.min_bet < (12 * BIG_BLIND)
+        raise_from(state.min_bet * 2)
+      elsif chance > 0.45 || state.min_bet == 0
+        get_from_stack(state.min_bet)
       else
         fold
       end
@@ -166,10 +167,10 @@ module Pucker
     end
 
     protected
-    def build_evidence(opts)
-      hr = discrete_hand_rank(opts[:table_cards])
-      mb = discrete_min_bet(opts[:min_bet])
-      position = discrete_position(opts[:total_players], opts[:index])
+    def build_evidence(state)
+      hr = discrete_hand_rank(state.table_cards)
+      mb = discrete_min_bet(state.min_bet)
+      position = discrete_position(state.total_players, state.position)
 
       evidence = {min_bet: mb, hand_rank: hr, position: position}
       # LOG.debug(evidence.to_s)

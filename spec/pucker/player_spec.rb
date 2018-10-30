@@ -4,6 +4,8 @@ java_import 'table.Card'
 
 module Pucker
   describe Player do
+    let (:state) { State.new(min_bet: 20) }
+
     describe "#initialize" do
       it "should have a uniq id" do
         ids = 100.times.map { Player.new.id }
@@ -14,10 +16,10 @@ module Pucker
 
     describe "#bet_if_active" do
       let(:player) { Player.new }
-      subject { player.bet_if_active(min_bet: 20) }
+      subject { player.bet_if_active(state) }
 
       it "should return what #bet returns" do
-        expect(player).to receive(:bet).with(min_bet: 20).and_return('any number')
+        expect(player).to receive(:bet).with(state).and_return('any number')
         expect(subject).to eq('any number')
       end
 
@@ -29,7 +31,7 @@ module Pucker
 
     describe "#bet" do
       it "should check every time" do
-        expect(Player.new.bet(min_bet: 30)).to be 30
+        expect(Player.new.bet(state)).to be 20
       end
     end
 
@@ -101,9 +103,11 @@ module Pucker
   end
 
   describe DummyPlayer do
-    let(:min_value) { 10 }
+    let (:min_bet) { 10 }
+    let (:state) { State.new(min_bet: min_bet) }
+
     let(:p) { DummyPlayer.new(100) }
-    subject { p.bet(min_bet: min_value) }
+    subject { p.bet(state) }
 
     describe "#bet" do
       context "when he folds" do
@@ -112,12 +116,12 @@ module Pucker
       end
       context "when he checks" do
         before { expect(p).to receive(:rand).and_return(0.7) }
-        it { is_expected.to be min_value }
+        it { is_expected.to be min_bet }
       end
       context "when he raises" do
         before { allow(p).to receive(:rand).and_return(0.9) }
         it "should return a value between min_value and stack" do
-          is_expected.to be_between(min_value, p.stack)
+          is_expected.to be_between(min_bet, p.stack)
         end
       end
     end
