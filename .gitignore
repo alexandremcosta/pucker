@@ -3,3 +3,4 @@ UofAHandEval/
 *.log
 .tmp/
 coverage/
+db/
