@@ -1,7 +1,6 @@
-require 'ruby-debug'
-# Author: Alexandre Marangoni Costa
 # Email: alexandremcost at gmail dot com
-# 
+# Author: Alexandre Marangoni Costa
+#
 # Responsible for orchestrating the game. Get Cards from the Dealer, give to Players,
 # collect bets from players, reward winners, register logs and statistics and sets everything up
 # for a new round.
@@ -43,12 +42,13 @@ module Pucker
       end
 
       winners = eligible_players_by_rank
-      LOG.info("POT:\n#{main_pot}")
-      LOG.info("TABLE CARDS: #{@table_cards.map{|c| c.toString}}")
-      LOG.info("# of 1st winners: #{winners.first.count}")
-      # LOG.info("WINNERS BEFORE REWARD: #{winners.flatten.map{|p| [p.id, p.hand.toString.strip, p.stack]}}")
+      LOG.info(" ")
+      LOG.info("TABLE CARDS: #{@table_cards.map{|c| c.toString}.join('  ')}")
+      # LOG.info("POT:\n#{main_pot}")
+      # LOG.info("# of 1st winners: #{winners.first.count}")
+      LOG.info("PLAYERS: #{winners.flatten.map{|p| [p.id, "[#{p.stack}]", p.hand.toString.strip].join(' ')}.join('  |  ')}")
       reward winners
-      LOG.info("GAME STATE: #{players.map{|p| [p.id, p.hand.toString.strip, p.stack]}}\n")
+      LOG.info("GAME STATE: #{players.map{|p| "#{p.id}: #{p.stack}"}.join('  |  ')}\n")
       register_statistic
       return true
     end
@@ -90,11 +90,10 @@ module Pucker
       players.cycle do |player|
         break if !players.has_multiple_active?
 
-        state = State.new(players.eligible.count, players.eligible.index(player), max_bet, @table_cards)
+        state = new_state(players.eligible.count, players.eligible.index(player), max_bet)
         last_bet = player.bet_if_active(state)
 
         if last_bet
-
           if last_bet > max_bet #RAISED
             max_bet = last_bet
             last_player = previous_player
@@ -102,7 +101,7 @@ module Pucker
 
           old_bets = round_pot.total_contributed_by(player_position(player))
           player.reward(old_bets)
-          LOG.debug("BET: #{player} - #{last_bet - old_bets}")
+          LOG.debug("PLAYER: #{player} - BET: #{last_bet - old_bets}")
           round_pot.add_bet(player_position(player), round, last_bet - old_bets)
         end
 
@@ -176,6 +175,15 @@ module Pucker
 
     def player_position(player)
       players.index(player)
+    end
+
+    def new_state(total_players, position, max_bet)
+      State.new(
+        total_players: total_players,
+        position: position,
+        min_bet: max_bet,
+        table_cards: @table_cards,
+        pot: main_pot)
     end
   end
 end

@@ -1,7 +1,6 @@
 ENV['test'] = 'true'
 
 require 'pucker'
-require 'ruby-debug'
 
 RSpec.configure do |config|
   config.filter_run wip: true

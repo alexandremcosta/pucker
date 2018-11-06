@@ -229,10 +229,11 @@ public class Card {
       String s = new String();
       s += getRankChar(getRank());
       switch (getSuit()) {
-         case HEARTS:   s+='h'; break;
-         case DIAMONDS: s+='d'; break;
-         case CLUBS:    s+='c'; break;
-         case SPADES:   s+='s'; break;
+         /* if Linux set color red */
+         case HEARTS:   s+= System.getProperty("os.name").equals("Linux") ? "\u001B[31m♥\u001B[0m" : "♥"; break;
+         case DIAMONDS: s+= System.getProperty("os.name").equals("Linux") ? "\u001B[31m♦\u001B[0m" : "♦"; break;
+         case CLUBS:    s+="♣"; break;
+         case SPADES:   s+="♠"; break;
       }
       return s;
    }
