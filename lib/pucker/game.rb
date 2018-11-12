@@ -29,10 +29,12 @@ module Pucker
       main_pot.merge(collect_bets)
 
       deal_turn
+      LOG.debug('')
       LOG.debug("TURN")
       main_pot.merge(collect_bets)
 
       deal_river
+      LOG.debug('')
       LOG.debug("RIVER")
       main_pot.merge(collect_bets)
 

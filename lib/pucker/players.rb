@@ -14,9 +14,11 @@ module Pucker
     attr_reader :id
 
     def initialize(amount=STACK)
+      @round_states = []
+      @all_states = []
       @active = true
       @allin = false
-      @stack = amount
+      @initial_round_stack = @stack = amount
       @id = self.class.name.split('::').last + Sequence.next.to_s
     end
 
@@ -34,7 +36,14 @@ module Pucker
     end
 
     def bet_if_active(state)
-      bet(state) if active?
+      bet_and_store(state) if active?
+    end
+
+    def bet_and_store(state)
+      state.decision = bet(state)
+      @round_states << state
+
+      return state.decision
     end
 
     def bet(state)
@@ -71,6 +80,8 @@ module Pucker
     end
 
     def reset_round_state
+      store_state_reward(@stack - @initial_round_stack)
+      @initial_round_stack = @stack
       @active = true
       @allin  = false
     end
@@ -80,7 +91,11 @@ module Pucker
     end
 
     def to_s
-      "#{id}\t- #{hand} - #{stack}"
+      "#{id.rjust(20, ' ')} -#{hand} - #{stack}"
+    end
+
+    def persist_states
+      @all_states.each(&:save)
     end
 
     protected
@@ -110,6 +125,12 @@ module Pucker
       else # ALLIN
         get_from_stack(stack)
       end
+    end
+
+    def store_state_reward(reward)
+      @round_states.each { |state| state.reward = reward }
+      @all_states += @round_states
+      @round_states = []
     end
   end
 

@@ -19,7 +19,7 @@ module Pucker
     def initialize(count=NUM_PLAYERS, amount=STACK)
       @count = count.is_a?(Integer) ? count : NUM_PLAYERS
       @amount = amount.is_a?(Integer) ? amount : STACK
-      @container = Array.new(@count-1) { player_source.call(@amount) }
+      @container = Array.new(@count-1) { player_source.new(@amount) }
       @container << BestBnPlayer.new(@amount)
     end
 
@@ -54,7 +54,7 @@ module Pucker
 
     private
     def player_source
-      @player_source ||= SimpleBnPlayer.public_method(:new)
+      [SimpleBnPlayer, BnPlayer, Player].sample
     end
   end
 end

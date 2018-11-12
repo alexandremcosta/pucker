@@ -33,6 +33,14 @@ module Pucker
       total
     end
 
+    def total
+      total = 0
+      (0...@n_players).each do |i|
+        total += total_contributed_by(i)
+      end
+      total
+    end
+
     def get_from_all(amount)
       total = 0
 
