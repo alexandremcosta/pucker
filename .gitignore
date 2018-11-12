@@ -3,4 +3,4 @@ UofAHandEval/
 *.log
 .tmp/
 coverage/
-db/
+db/pucker.sqlite3
