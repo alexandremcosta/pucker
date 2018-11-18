@@ -27,7 +27,7 @@ module Pucker
       end
     end
 
-    describe "#merge" do
+    describe "#merge!" do
       before do
         @pot = Pot.new(3)
         @other_pot = Pot.new(3)
@@ -39,7 +39,7 @@ module Pucker
 
       context "when directed called" do
         it "should merge too pots" do
-          @pot.merge(@other_pot)
+          @pot.merge!(@other_pot)
           expect(@pot.all_bets[0][:preflop]).to eq([10])
           expect(@pot.all_bets[0][:flop]).to eq([20])
           expect(@pot.all_bets[1][:preflop]).to eq([10])

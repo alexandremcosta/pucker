@@ -40,10 +40,10 @@ module Pucker
     end
 
     def bet_and_store(state)
-      state.decision = bet(state)
+      amount = bet(state)
+      state.set_decision(amount)
       @round_states << state
-
-      return state.decision
+      amount
     end
 
     def bet(state)
@@ -94,8 +94,9 @@ module Pucker
       "#{id.rjust(20, ' ')} -#{hand} - #{stack}"
     end
 
-    def persist_states
+    def persist_and_clear_states
       @all_states.each(&:save)
+      @all_states = []
     end
 
     protected
@@ -130,6 +131,9 @@ module Pucker
     def store_state_reward(reward)
       @round_states.each { |state| state.reward = reward }
       @all_states += @round_states
+      LOG.debug('STATES FOR')
+      LOG.debug(to_s)
+      LOG.debug(@round_states)
       @round_states = []
     end
   end

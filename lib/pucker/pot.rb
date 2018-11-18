@@ -6,7 +6,7 @@
 
 module Pucker
   class Pot
-    attr_accessor :all_bets #todo: protected
+    attr_accessor :all_bets
 
     def initialize(n_players)
       @n_players = n_players
@@ -18,11 +18,14 @@ module Pucker
     end
 
     def merge(other_pot)
-      raise 'invalid pot merge' if other_pot.all_bets.size != @all_bets.size
+      bets = merge_bets(other_pot)
+      self.class.new(@n_players).tap {|pot| pot.all_bets = bets}
+    end
 
-      @all_bets.map!.with_index do |player_bets, index|
-        player_bets.merge(other_pot.all_bets[index])
-      end
+
+    def merge!(other_pot)
+      @all_bets = merge_bets(other_pot)
+      self
     end
 
     def total_contributed_by(index)
@@ -89,6 +92,15 @@ module Pucker
         str << "Player position #{index}" + ': ' + bet.to_s + "\n"
       end
       return str
+    end
+
+    private
+    def merge_bets(other_pot)
+      raise 'invalid pot merge' if other_pot.all_bets.size != @all_bets.size
+
+      all_bets.map.with_index do |player_bets, index|
+        player_bets.merge(other_pot.all_bets[index])
+      end
     end
   end
 end

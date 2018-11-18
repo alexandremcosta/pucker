@@ -13,6 +13,12 @@ module Pucker
       @table_king = {}
     end
 
+    def print_all
+      print_losses
+      print_high_stack
+      print_table_king
+    end
+
     def increase_losses(player)
       @losses[player] ||= 0
       @losses[player] += 1

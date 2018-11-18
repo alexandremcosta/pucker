@@ -54,7 +54,7 @@ module Pucker
 
     private
     def player_source
-      [SimpleBnPlayer, BnPlayer, Player].sample
+      [SimpleBnPlayer, SimpleBnPlayer, BnPlayer, BnPlayer, Player].sample
     end
   end
 end

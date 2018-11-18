@@ -24,16 +24,19 @@ module Pucker
       setup_game
       collect_blinds
 
-      deal_flop
+      # FLOP
+      3.times do deal_table_card end
       LOG.debug("FLOP")
       main_pot.merge(collect_bets)
 
-      deal_turn
+      # TURN
+      deal_table_card
       LOG.debug('')
       LOG.debug("TURN")
       main_pot.merge(collect_bets)
 
-      deal_river
+      # RIVER
+      deal_table_card
       LOG.debug('')
       LOG.debug("RIVER")
       main_pot.merge(collect_bets)
@@ -86,25 +89,24 @@ module Pucker
 
     def collect_bets
       max_bet = 0
-      last_player = previous_player =  players.last
+      last_player = previous_player = players.last
       round_pot = Pot.new(players.size)
 
       players.cycle do |player|
         break if !players.has_multiple_active?
 
-        state = new_state(players.eligible.count, players.eligible.index(player), max_bet)
-        last_bet = player.bet_if_active(state)
+        state = new_state(players.eligible.count, players.eligible.index(player), max_bet, player.hand, main_pot.merge(round_pot))
 
-        if last_bet
-          if last_bet > max_bet #RAISED
-            max_bet = last_bet
+        if player_bet = player.bet_if_active(state)
+          if player_bet > max_bet #RAISED
+            max_bet = player_bet
             last_player = previous_player
           end
 
           old_bets = round_pot.total_contributed_by(player_position(player))
           player.reward(old_bets)
-          LOG.debug("PLAYER: #{player} - BET: #{last_bet - old_bets}")
-          round_pot.add_bet(player_position(player), round, last_bet - old_bets)
+          LOG.debug("PLAYER: #{player} - BET: #{player_bet - old_bets}")
+          round_pot.add_bet(player_position(player), round, player_bet - old_bets)
         end
 
         previous_player = player
@@ -112,18 +114,6 @@ module Pucker
       end
 
       return round_pot
-    end
-
-    def deal_flop
-      3.times do deal_table_card end
-    end
-
-    def deal_turn
-      deal_table_card
-    end
-
-    def deal_river
-      deal_table_card
     end
 
     def deal_table_card
@@ -179,13 +169,14 @@ module Pucker
       players.index(player)
     end
 
-    def new_state(total_players, position, max_bet)
-      State.new(
+    def new_state(total_players, position, max_bet, hand, pot)
+      State.build(
         total_players: total_players,
+        table_cards: @table_cards,
         position: position,
         min_bet: max_bet,
-        table_cards: @table_cards,
-        pot: main_pot)
+        hand: hand,
+        pot: pot)
     end
   end
 end
