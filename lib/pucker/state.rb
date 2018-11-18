@@ -3,7 +3,17 @@ java_import 'table.Hand'
 
 module Pucker
   class State < ActiveRecord::Base
+    include InsertMultiple
+
     attr_reader :table_cards
+
+    def self.create_multiple(collection)
+      return if collection.empty?
+      fields = collection.first.keys
+      values = collection.map(&:values)
+
+      insert_multiple(fields, values)
+    end
 
     def self.build(
       total_players: NUM_PLAYERS,
