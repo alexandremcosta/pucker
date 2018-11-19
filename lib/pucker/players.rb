@@ -95,7 +95,7 @@ module Pucker
     end
 
     def persist_and_clear_states
-      @all_states.each(&:save)
+      State.create_multiple(@all_states)
       @all_states = []
     end
 
@@ -131,9 +131,6 @@ module Pucker
     def store_state_reward(reward)
       @round_states.each { |state| state.reward = reward }
       @all_states += @round_states
-      LOG.debug('STATES FOR')
-      LOG.debug(to_s)
-      LOG.debug(@round_states)
       @round_states = []
     end
   end

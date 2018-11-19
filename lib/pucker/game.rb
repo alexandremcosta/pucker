@@ -95,7 +95,7 @@ module Pucker
       players.cycle do |player|
         break if !players.has_multiple_active?
 
-        state = new_state(players.eligible.count, players.eligible.index(player), max_bet, player.hand, main_pot.merge(round_pot))
+        state = new_state(players.eligible.count, players.eligible.index(player), max_bet, player.hand, main_pot.merge(round_pot), player.id)
 
         if player_bet = player.bet_if_active(state)
           if player_bet > max_bet #RAISED
@@ -169,12 +169,13 @@ module Pucker
       players.index(player)
     end
 
-    def new_state(total_players, position, max_bet, hand, pot)
+    def new_state(total_players, position, max_bet, hand, pot, player)
       State.build(
         total_players: total_players,
         table_cards: @table_cards,
         position: position,
         min_bet: max_bet,
+        player: player,
         hand: hand,
         pot: pot)
     end

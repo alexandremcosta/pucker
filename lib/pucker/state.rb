@@ -1,3 +1,4 @@
+require_relative 'concerns/insert_multiple'
 require 'java'
 java_import 'table.Hand'
 
@@ -9,8 +10,9 @@ module Pucker
 
     def self.create_multiple(collection)
       return if collection.empty?
-      fields = collection.first.keys
-      values = collection.map(&:values)
+
+      fields = collection.first.poker_attributes.keys
+      values = collection.map{|s| s.poker_attributes.values}
 
       insert_multiple(fields, values)
     end
@@ -20,6 +22,7 @@ module Pucker
       table_cards: [],
       position: 0,
       min_bet: 0,
+      player: '',
       hand: Hand.new,
       pot: Pot.new(NUM_PLAYERS))
 
@@ -38,32 +41,14 @@ module Pucker
       count_round_raises(pot, :flop)  if table_cards.size >= 3
     end
 
-    def count_round_raises(pot, round)
-      max_bet = 0
-      bet_index = 0
-      all_bets = pot.all_bets
-      max_index = all_bets.map{|bets| bets[round].size}.max
-
-      initialize_raises
-
-      (0...max_index).each do |index|
-        all_bets.each do |player_bets|
-          bet = player_bets[round][index] || 0
-          if bet > max_bet
-            max_bet = bet
-            value = instance_variable_get("@player#{index+1}_raises") || 0
-            instance_variable_set("@player#{index+1}_raises", value + 1)
-          end
-        end
-      end
-    end
-
     def set_amount(pot)
       self.player1_amount = pot.total_contributed_by(0)
       self.player2_amount = pot.total_contributed_by(1)
       self.player3_amount = pot.total_contributed_by(2)
       self.player4_amount = pot.total_contributed_by(3)
       self.player5_amount = pot.total_contributed_by(4)
+
+      self.self_amount = self.attributes["player#{self.position+1}_amount"]
     end
 
     def set_cards(table_cards, hand)
@@ -102,7 +87,34 @@ module Pucker
       end
     end
 
+    def poker_attributes
+      attributes.except('id')
+    end
+
     private
+
+    def count_round_raises(pot, round)
+      max_bet = 0
+      bet_index = 0
+      all_bets = pot.all_bets
+      max_index = all_bets.map{|bets| bets[round].size}.max
+
+      initialize_raises
+
+      (0...max_index).each do |index|
+        all_bets.each do |player_bets|
+          bet = player_bets[round][index] || 0
+          if bet > max_bet
+            max_bet = bet
+            value = attributes["player#{index+1}_raises"]
+            self.send("player#{index+1}_raises=", value + 1)
+          end
+        end
+      end
+
+      self.self_raises = self.attributes["player#{self.position+1}_raises"]
+    end
+
     def initialize_raises
       self.player1_raises = 0
       self.player2_raises = 0

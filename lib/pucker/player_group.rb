@@ -52,6 +52,10 @@ module Pucker
       @container.max_by{ |p| p.stack }
     end
 
+    def persist_states
+      @container.each(&:persist_and_clear_states)
+    end
+
     private
     def player_source
       [SimpleBnPlayer, SimpleBnPlayer, BnPlayer, BnPlayer, Player].sample
