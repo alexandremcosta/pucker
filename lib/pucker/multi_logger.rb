@@ -15,6 +15,8 @@ module Pucker
       if ENV['test']
         log_file = File.open("./test.log", "a")
         @logger = Logger.new(MultiIO.new(log_file))
+      elsif ENV['NOLOG']
+        @logger = Logger.new(MultiIO.new())
       else
         log_file = File.open("../pucker.log", "a")
         @logger = Logger.new(MultiIO.new(STDOUT, log_file))

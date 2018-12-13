@@ -35,10 +35,6 @@ module Pucker
       end
     end
 
-    def bet_if_active(state)
-      bet_and_store(state) if active?
-    end
-
     def bet_and_store(state)
       amount = bet(state)
       state.set_decision(amount)

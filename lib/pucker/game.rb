@@ -27,19 +27,19 @@ module Pucker
       # FLOP
       3.times do deal_table_card end
       LOG.debug("FLOP")
-      main_pot.merge(collect_bets)
+      main_pot.merge!(collect_bets)
 
       # TURN
       deal_table_card
       LOG.debug('')
       LOG.debug("TURN")
-      main_pot.merge(collect_bets)
+      main_pot.merge!(collect_bets)
 
       # RIVER
       deal_table_card
       LOG.debug('')
       LOG.debug("RIVER")
-      main_pot.merge(collect_bets)
+      main_pot.merge!(collect_bets)
 
       if players.eligible.empty?
         LOG.error("No eligible players")
@@ -95,18 +95,21 @@ module Pucker
       players.cycle do |player|
         break if !players.has_multiple_active?
 
-        state = new_state(players.eligible.count, players.eligible.index(player), max_bet, player.hand, main_pot.merge(round_pot), player.id)
 
-        if player_bet = player.bet_if_active(state)
-          if player_bet > max_bet #RAISED
-            max_bet = player_bet
-            last_player = previous_player
+        if player.active?
+          state = new_state(players.eligible.count, players.eligible.index(player), max_bet, player.hand, main_pot.merge(round_pot), player.id)
+
+          if player_bet = player.bet_and_store(state)
+            if player_bet > max_bet #RAISED
+              max_bet = player_bet
+              last_player = previous_player
+            end
+
+            old_bets = round_pot.total_contributed_by(player_position(player))
+            player.reward(old_bets)
+            LOG.debug("PLAYER: #{player} - BET: #{player_bet - old_bets}")
+            round_pot.add_bet(player_position(player), round, player_bet - old_bets)
           end
-
-          old_bets = round_pot.total_contributed_by(player_position(player))
-          player.reward(old_bets)
-          LOG.debug("PLAYER: #{player} - BET: #{player_bet - old_bets}")
-          round_pot.add_bet(player_position(player), round, player_bet - old_bets)
         end
 
         previous_player = player

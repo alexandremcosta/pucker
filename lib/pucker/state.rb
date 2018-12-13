@@ -26,7 +26,7 @@ module Pucker
       hand: Hand.new,
       pot: Pot.new(NUM_PLAYERS))
 
-      state = State.new(total_players: total_players, position: position, min_bet: min_bet)
+      state = State.new(total_players: total_players, position: position, min_bet: min_bet, player: player)
       state.total_pot = pot.total
       state.set_cards(table_cards, hand)
       state.set_amount(pot)
