@@ -20,11 +20,11 @@ module Pucker
       chance   = chance_to_win(evidence)
 
       if chance > 0.75 && state.min_bet < (8 * BIG_BLIND)
-        raise_from(state.min_bet)
+        stocastic_raise(state.min_bet, chance)
       elsif chance > 0.5 || state.min_bet == 0
-        get_from_stack(state.min_bet)
+        stocastic_check(state.min_bet, chance)
       else
-        fold
+        stocastic_fold(state.min_bet)
       end
     end
 
@@ -79,12 +79,12 @@ module Pucker
       evidence = build_evidence(state)
       chance   = chance_to_win(evidence)
 
-      if chance > 0.7 && state.min_bet < (12 * BIG_BLIND)
-        raise_from(state.min_bet * 2)
-      elsif chance > 0.40 || state.min_bet == 0
-        get_from_stack(state.min_bet)
+      if chance > 0.75 && state.min_bet < (12 * BIG_BLIND)
+        stocastic_raise(state.min_bet, chance)
+      elsif chance > 0.5 || state.min_bet == 0
+        stocastic_check(state.min_bet, chance)
       else
-        fold
+        stocastic_fold(state.min_bet)
       end
     end
 
@@ -150,13 +150,13 @@ module Pucker
       chance   = chance_to_win(evidence)
 
       if chance > 0.9 || (chance > 0.75 && hand_rank(state.table_cards) >= 1113879)
-        raise_from(state.min_bet * 4)
+        stocastic_raise(state.min_bet * 2, chance)
       elsif chance > 0.7 && state.min_bet < (12 * BIG_BLIND)
-        raise_from(state.min_bet * 2)
+        stocastic_raise(state.min_bet, chance)
       elsif chance > 0.45 || state.min_bet == 0
-        get_from_stack(state.min_bet)
+        stocastic_check(state.min_bet, chance)
       else
-        fold
+        stocastic_fold(state.min_bet)
       end
     end
 

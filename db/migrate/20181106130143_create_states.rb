@@ -3,8 +3,11 @@ class CreateStates < ActiveRecord::Migration
     create_table :states do |t|
       t.integer :total_players,  null: false
       t.integer :position,       null: false
+      t.integer :position_over_all, null: false
       t.integer :min_bet,        null: false
       t.integer :total_pot,      null: false
+      t.integer :hand_rank,      null: false
+      t.decimal :hand_strength,  null: false
       t.integer :card1_rank,     null: false
       t.integer :card1_suit,     null: false
       t.integer :card2_rank,     null: false
@@ -35,6 +38,7 @@ class CreateStates < ActiveRecord::Migration
       t.integer :decision_check, null: false
       t.integer :decision_raise, null: false
       t.integer :reward,         null: false
+      t.string  :player,         null: false
     end
   end
 end

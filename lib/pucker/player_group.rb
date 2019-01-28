@@ -19,7 +19,12 @@ module Pucker
     def initialize(count=NUM_PLAYERS, amount=STACK)
       @count = count.is_a?(Integer) ? count : NUM_PLAYERS
       @amount = amount.is_a?(Integer) ? amount : STACK
-      @container = Array.new(@count-1) { player_source.new(@amount) }
+      # @container = Array.new(@count-1) { player_source.new(@amount) }
+      @container = []
+      @container << DummyPlayer.new(@amount)
+      @container << SimpleBnPlayer.new(@amount)
+      @container << BnPlayer.new(@amount)
+      @container << BestBnPlayer.new(@amount)
       @container << BestBnPlayer.new(@amount)
     end
 

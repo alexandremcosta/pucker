@@ -55,6 +55,7 @@ module Pucker
       reward winners
       LOG.info("GAME STATE: #{players.map{|p| "#{p.id}: #{p.stack}"}.join('  |  ')}\n")
       register_statistic
+      rotate_and_reset_states
       return true
     end
 
@@ -71,13 +72,12 @@ module Pucker
       @table_cards = []
       main_pot.reset
       dealer.reset
-      prepare_players
+      players.set_hands(dealer)
     end
 
-    def prepare_players
+    def rotate_and_reset_states
       players.rotate!
       players.reset
-      players.set_hands(dealer)
     end
 
     def collect_blinds
@@ -97,7 +97,7 @@ module Pucker
 
 
         if player.active?
-          state = new_state(players.eligible.count, players.eligible.index(player), max_bet, player.hand, main_pot.merge(round_pot), player.id)
+          state = new_state(players.eligible.count, players.eligible.index(player), player_position(player), max_bet, player.hand, main_pot.merge(round_pot), player.id)
 
           if player_bet = player.bet_and_store(state)
             if player_bet > max_bet #RAISED
@@ -109,6 +109,8 @@ module Pucker
             player.reward(old_bets)
             LOG.debug("PLAYER: #{player} - BET: #{player_bet - old_bets}")
             round_pot.add_bet(player_position(player), round, player_bet - old_bets)
+          else
+            LOG.debug("PLAYER: #{player} - FOLD")
           end
         end
 
@@ -172,11 +174,12 @@ module Pucker
       players.index(player)
     end
 
-    def new_state(total_players, position, max_bet, hand, pot, player)
+    def new_state(total_players, position, position_over_all, max_bet, hand, pot, player)
       State.build(
         total_players: total_players,
         table_cards: @table_cards,
         position: position,
+        position_over_all: position_over_all,
         min_bet: max_bet,
         player: player,
         hand: hand,

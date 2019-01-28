@@ -5,6 +5,7 @@
 
 require_relative 'sequence'
 require 'java'
+java_import 'table.Card'
 java_import 'table.Hand'
 java_import 'table.HandEvaluator'
 
@@ -36,6 +37,8 @@ module Pucker
     end
 
     def bet_and_store(state)
+      state.hand_rank = hand_rank(state.table_cards)
+      state.hand_strength = hand_strength(state.table_cards)
       amount = bet(state)
       state.set_decision(amount)
       @round_states << state
@@ -64,11 +67,35 @@ module Pucker
       hand.add_card(card2)
     end
 
-    def hand_rank(cards)
-      old_cards = @cards
-      @cards    = Array.new(cards)
-      @rank     = HandEvaluator.rank_hand(full_hand(@cards)) if old_cards != @cards
-      @rank
+    def hand_rank(table_cards)
+      HandEvaluator.rank_hand(full_hand(table_cards))
+    end
+
+    def hand_strength(table_cards)
+      ahead = behind = tied = 0
+      our_rank = hand_rank(table_cards)
+
+      # Consider all two card combinations of the remaining cards
+      deck = (0..51).to_a
+      known_cards = table_cards.map(&:get_index) + [hand.get_card_index(1), hand.get_card_index(2)]
+      remaining_cards = deck - known_cards
+
+      remaining_cards.combination(2) do |op_card1, op_card2|
+        op_hand = Hand.new
+        op_cards = table_cards + [Card.new(op_card1), Card.new(op_card2)]
+        op_cards.each { |card| op_hand.add_card(card) }
+        op_rank = HandEvaluator.rank_hand(op_hand)
+
+        if our_rank > op_rank
+          ahead += 1
+        elsif our_rank < op_rank
+          behind += 1
+        else
+          tied += 1
+        end
+      end
+
+      return (ahead+(tied/2.0)) / (ahead+tied+behind)
     end
 
     def reward(price)
@@ -114,11 +141,42 @@ module Pucker
       @allin = true
     end
 
+    def stocastic_raise(min_bet, chance)
+      random_choice = rand
+
+      if random_choice < chance
+        raise_from(min_bet)
+      else
+        get_from_stack(min_bet)
+      end
+    end
+
+    def stocastic_check(min_bet, chance)
+      random_choice = rand
+
+      if random_choice < chance
+        get_from_stack(min_bet)
+      else
+        raise_from(min_bet)
+      end
+    end
+
+    def stocastic_fold(min_bet)
+      random_choice = rand
+
+      if random_choice < 0.9
+        fold
+      else
+        get_from_stack(min_bet)
+      end
+    end
+
     def raise_from(min_bet)
       min_bet = BIG_BLIND if min_bet == 0
 
       if stack > (4 * min_bet)
-        get_from_stack(2 * min_bet)
+        raise_factor = [2, 3, 4].sample
+        get_from_stack(raise_factor * min_bet)
       else # ALLIN
         get_from_stack(stack)
       end
@@ -137,9 +195,9 @@ module Pucker
 
       choice = rand
 
-      if min_bet > 0 && choice < 0.2 # FOLD
+      if min_bet > 0 && choice < 0.333 # FOLD
         fold
-      elsif choice < 0.85 # CHECK
+      elsif choice < 0.666 # CHECK
         get_from_stack(min_bet)
       else # RAISE
         raise_from(min_bet)
