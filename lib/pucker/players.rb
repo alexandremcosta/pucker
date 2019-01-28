@@ -98,6 +98,55 @@ module Pucker
       return (ahead+(tied/2.0)) / (ahead+tied+behind)
     end
 
+    def hand_potential(table_cards)
+      ahead = 0
+      behind = 1
+      tied = 2
+
+      hp = Array.new(3) { Array.new(3, 0) }
+      hp_total = Array.new(3, 0)
+
+      our_rank = hand_rank(table_cards)
+
+      # Consider all two card combinations of the remaining cards for the opponent
+      deck = (0..51).to_a
+      known_cards = table_cards.map(&:get_index) + [hand.get_card_index(1), hand.get_card_index(2)]
+      possible_op_cards = deck - known_cards
+
+      possible_op_cards.combination(2) do |op_card1, op_card2|
+        op_hand = Hand.new
+        (table_cards + [Card.new(op_card1), Card.new(op_card2)]).each { |card| op_hand.add_card(card) }
+        op_rank = HandEvaluator.rank_hand(op_hand)
+
+        index = if our_rank > op_rank; ahead
+        elsif our_rank < op_rank;      behind
+        else;                          tied
+        end
+        hp_total[index] += 1
+
+        possible_next_card = possible_op_cards - [op_card1, op_card2]
+        possible_next_card.each do |new_card|
+          new_table = table_cards + [Card.new(new_card)]
+          our_best = hand_rank(new_table)
+
+          op_hand_with_new_table = Hand.new(op_hand)
+          op_hand_with_new_table.add_card(Card.new(new_card))
+          op_best = HandEvaluator.rank_hand(op_hand_with_new_table)
+
+          if our_best > op_best;    hp[index][ahead] += 1
+          elsif our_best < op_best; hp[index][behind] += 1
+          else;                     hp[index][tied] += 1
+          end
+        end
+      end
+
+      ppot = (hp[behind][ahead] + hp[behind][tied]/2.0 + hp[tied][ahead]/2.0) / (hp[behind].sum + hp[tied].sum/2.0)
+      npot = (hp[ahead][behind] + hp[tied][behind]/2.0 + hp[ahead][tied]/2.0) / (hp[ahead].sum + hp[tied].sum/2.0)
+      hand_strength = (hp_total[ahead] + (hp_total[tied]/2.0)) / hp_total.sum
+
+      return ppot.round(4), npot.round(4), hand_strength.round(4)
+    end
+
     def reward(price)
       @stack += price
     end

@@ -4,8 +4,8 @@ g = Pucker::Game.new
 
 starting = Process.clock_gettime(Process::CLOCK_MONOTONIC)
 
-10.times do |n|
-  10.times { g.play }
+100.times do |n|
+  100.times { g.play }
   g.players.persist_states
 
   ending = Process.clock_gettime(Process::CLOCK_MONOTONIC)
