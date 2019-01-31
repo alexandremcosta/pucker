@@ -4,3 +4,6 @@ UofAHandEval/
 .tmp/
 coverage/
 db/pucker.sqlite3
+*.joblib
+__pycache__/
+*.sqlite3

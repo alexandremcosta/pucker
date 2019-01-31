@@ -37,8 +37,7 @@ module Pucker
     end
 
     def bet_and_store(state)
-      state.hand_rank = hand_rank(state.table_cards)
-      state.hand_strength = hand_strength(state.table_cards)
+      set_hand_status(state)
       amount = bet(state)
       state.set_decision(amount)
       @round_states << state
@@ -67,86 +66,6 @@ module Pucker
       hand.add_card(card2)
     end
 
-    def hand_rank(table_cards)
-      HandEvaluator.rank_hand(full_hand(table_cards))
-    end
-
-    def hand_strength(table_cards)
-      ahead = behind = tied = 0
-      our_rank = hand_rank(table_cards)
-
-      # Consider all two card combinations of the remaining cards
-      deck = (0..51).to_a
-      known_cards = table_cards.map(&:get_index) + [hand.get_card_index(1), hand.get_card_index(2)]
-      remaining_cards = deck - known_cards
-
-      remaining_cards.combination(2) do |op_card1, op_card2|
-        op_hand = Hand.new
-        op_cards = table_cards + [Card.new(op_card1), Card.new(op_card2)]
-        op_cards.each { |card| op_hand.add_card(card) }
-        op_rank = HandEvaluator.rank_hand(op_hand)
-
-        if our_rank > op_rank
-          ahead += 1
-        elsif our_rank < op_rank
-          behind += 1
-        else
-          tied += 1
-        end
-      end
-
-      return (ahead+(tied/2.0)) / (ahead+tied+behind)
-    end
-
-    def hand_potential(table_cards)
-      ahead = 0
-      behind = 1
-      tied = 2
-
-      hp = Array.new(3) { Array.new(3, 0) }
-      hp_total = Array.new(3, 0)
-
-      our_rank = hand_rank(table_cards)
-
-      # Consider all two card combinations of the remaining cards for the opponent
-      deck = (0..51).to_a
-      known_cards = table_cards.map(&:get_index) + [hand.get_card_index(1), hand.get_card_index(2)]
-      possible_op_cards = deck - known_cards
-
-      possible_op_cards.combination(2) do |op_card1, op_card2|
-        op_hand = Hand.new
-        (table_cards + [Card.new(op_card1), Card.new(op_card2)]).each { |card| op_hand.add_card(card) }
-        op_rank = HandEvaluator.rank_hand(op_hand)
-
-        index = if our_rank > op_rank; ahead
-        elsif our_rank < op_rank;      behind
-        else;                          tied
-        end
-        hp_total[index] += 1
-
-        possible_next_card = possible_op_cards - [op_card1, op_card2]
-        possible_next_card.each do |new_card|
-          new_table = table_cards + [Card.new(new_card)]
-          our_best = hand_rank(new_table)
-
-          op_hand_with_new_table = Hand.new(op_hand)
-          op_hand_with_new_table.add_card(Card.new(new_card))
-          op_best = HandEvaluator.rank_hand(op_hand_with_new_table)
-
-          if our_best > op_best;    hp[index][ahead] += 1
-          elsif our_best < op_best; hp[index][behind] += 1
-          else;                     hp[index][tied] += 1
-          end
-        end
-      end
-
-      ppot = (hp[behind][ahead] + hp[behind][tied]/2.0 + hp[tied][ahead]/2.0) / (hp[behind].sum + hp[tied].sum/2.0)
-      npot = (hp[ahead][behind] + hp[tied][behind]/2.0 + hp[ahead][tied]/2.0) / (hp[ahead].sum + hp[tied].sum/2.0)
-      hand_strength = (hp_total[ahead] + (hp_total[tied]/2.0)) / hp_total.sum
-
-      return ppot.round(4), npot.round(4), hand_strength.round(4)
-    end
-
     def reward(price)
       @stack += price
     end
@@ -169,6 +88,10 @@ module Pucker
     def persist_and_clear_states
       State.create_multiple(@all_states)
       @all_states = []
+    end
+
+    def hand_rank(table_cards)
+      HandEvaluator.rank_hand(full_hand(table_cards))
     end
 
     protected
@@ -235,6 +158,68 @@ module Pucker
       @round_states.each { |state| state.reward = reward }
       @all_states += @round_states
       @round_states = []
+    end
+
+    def set_hand_status(state)
+      state.hand_rank = hand_rank(state.table_cards)
+      state.ppot, state.npot, state.hand_strength = hand_potential(state.table_cards)
+    end
+
+    def hand_potential(table_cards)
+      ahead = 0
+      behind = 1
+      tied = 2
+
+      hp = Array.new(3) { Array.new(3, 0) }
+      hp_total = Array.new(3, 0)
+
+      our_rank = hand_rank(table_cards)
+
+      # Consider all two card combinations of the remaining cards for the opponent
+      deck = (0..51).to_a
+      known_cards = table_cards.map(&:get_index) + [hand.get_card_index(1), hand.get_card_index(2)]
+      possible_op_cards = deck - known_cards
+
+      possible_op_cards.combination(2) do |op_card1, op_card2|
+        op_hand = Hand.new
+        (table_cards + [Card.new(op_card1), Card.new(op_card2)]).each { |card| op_hand.add_card(card) }
+        op_rank = HandEvaluator.rank_hand(op_hand)
+
+        index = if our_rank > op_rank; ahead
+        elsif our_rank < op_rank;      behind
+        else;                          tied
+        end
+        hp_total[index] += 1
+
+        if table_cards.size < 5 # do not calculate potential for river
+          possible_next_card = possible_op_cards - [op_card1, op_card2]
+          possible_next_card.each do |new_card|
+            new_table = table_cards + [Card.new(new_card)]
+            our_best = hand_rank(new_table)
+
+            op_hand_with_new_table = Hand.new(op_hand)
+            op_hand_with_new_table.add_card(Card.new(new_card))
+            op_best = HandEvaluator.rank_hand(op_hand_with_new_table)
+
+            if our_best > op_best;    hp[index][ahead] += 1
+            elsif our_best < op_best; hp[index][behind] += 1
+            else;                     hp[index][tied] += 1
+            end
+          end
+        end
+      end
+
+      ppot = npot = 0
+      if table_cards.size < 5
+        ppot = (hp[behind][ahead] + hp[behind][tied]/2.0 + hp[tied][ahead]/2.0) / (hp[behind].sum + hp[tied].sum/2.0)
+        ppot = 0 if ppot.nan?
+        npot = (hp[ahead][behind] + hp[tied][behind]/2.0 + hp[ahead][tied]/2.0) / (hp[ahead].sum + hp[tied].sum/2.0)
+        npot = 0 if npot.nan?
+      end
+
+      hand_strength = (hp_total[ahead] + (hp_total[tied]/2.0)) / hp_total.sum
+
+      return ppot.round(4), npot.round(4), hand_strength.round(4)
     end
   end
 

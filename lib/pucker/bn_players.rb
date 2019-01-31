@@ -1,4 +1,3 @@
-require 'ruby-debug'
 # Author: Alexandre Marangoni Costa
 # Email: alexandremcost at gmail dot com
 #

@@ -10,7 +10,6 @@ require_relative 'dealer'
 require_relative 'player_group'
 require_relative 'pot'
 require_relative 'multi_logger'
-require_relative 'bn_players'
 
 module Pucker
   class Game

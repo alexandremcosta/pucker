@@ -1,0 +1,39 @@
+# Without
+- Flop
+Loss classified as loss 16906
+Wins classified as wins 2622
+Wins classified as loss 1737
+Loss classified as wins 1241
+
+Accuracy:        0.8676797298498178
+Precision:       0.6787470877556303
+Recall:          0.6015141087405368
+F1 score:        0.6378010216492337
+Cross validated score:  -117.2669036806141
+
+- Turn
+Loss classified as loss 2800
+Wins classified as wins 1736
+Wins classified as loss 704
+Loss classified as wins 654
+
+Accuracy:        0.7695961995249406
+Precision:       0.7263598326359832
+Recall:          0.7114754098360656
+F1 score:        0.718840579710145
+Cross validated score:  -406.326944433893
+
+- River
+Loss classified as loss 1275
+Wins classified as wins 1031
+Wins classified as loss 321
+Loss classified as wins 298
+
+Accuracy:        0.7883760683760683
+Precision:       0.7757712565838977
+Recall:          0.7625739644970414
+F1 score:        0.7691160014919807
+Cross validated score:  -550.7090189372536
+
+# With
+- Flop

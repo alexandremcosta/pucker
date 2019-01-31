@@ -1,0 +1,264 @@
+# River
+	1. 100 epochs batch 1000 with tanh
+	Loss classified as loss 1127
+	Wins classified as wins 694
+	Wins classified as loss 526
+	Loss classified as wins 224
+
+	Accuracy:        0.7082847141190198
+	Precision:       0.7559912854030502
+	Recall:          0.5688524590163935
+	F1 score:        0.6492048643592142
+	Mean abs error:  665.3616831188581
+
+	2. 25 epochs batch 1000 with tanh
+	Loss classified as loss 903
+	Wins classified as wins 995
+	Wins classified as loss 225
+	Loss classified as wins 448
+
+	Accuracy:        0.7382341501361338
+	Precision:       0.6895356895356896
+	Recall:          0.8155737704918032
+	F1 score:        0.7472775065715358
+	Mean abs error:  663.4887016886915
+
+	3. 25 epochs batch 1000 without tanh
+	Loss classified as loss 1231
+	Wins classified as wins 887
+	Wins classified as loss 315
+	Loss classified as wins 264
+
+	Accuracy:        0.7853170189098999
+	Precision:       0.7706342311033884
+	Recall:          0.737936772046589
+	F1 score:        0.753931151721207
+	Mean abs error:  555.1199909425197
+
+# Flop
+- All positions
+- Y as regression
+- Hand strength and potential
+
+	1. 25 epochs batch 1000
+	Loss classified as loss 14461
+	Wins classified as wins 2420
+	Wins classified as loss 1329
+	Loss classified as wins 1234
+
+	Accuracy:        0.868185558527052
+	Precision:       0.662287903667214
+	Recall:          0.6455054681248333
+	F1 score:        0.6537890044576523
+	Mean abs error:  121.97066833425104
+
+	2. 100 epochs batch 1000
+	Loss classified as loss 14595
+	Wins classified as wins 2351
+	Wins classified as loss 1394
+	Loss classified as wins 1337
+
+	Accuracy:        0.861208517558571
+	Precision:       0.637472885032538
+	Recall:          0.6277703604806408
+	F1 score:        0.6325844208260459
+	Mean abs error:  129.40160823942938
+
+- All positions
+- Y as regression
+- Hand Strength
+
+	1. 25 epochs batch 1000
+	Loss classified as loss 9858
+	Wins classified as wins 1034
+	Wins classified as loss 1522
+	Loss classified as wins 509
+
+	Accuracy:        0.8428383502282751
+	Precision:       0.6701231367465975
+	Recall:          0.4045383411580595
+	F1 score:        0.5045132959258356
+	Mean abs error:  258.3495137431543
+
+- All positions
+- Y as regression
+
+	1. 25 epochs batch 5000
+	Loss classified as loss 63100
+	Wins classified as wins 6820
+	Wins classified as loss 10589
+	Loss classified as wins 4554
+
+	Accuracy:        0.8219790037971856
+	Precision:       0.5996131528046421
+	Recall:          0.3917513929576656
+	F1 score:        0.4738908383420769
+	Mean abs error:  260.84590255496835
+
+	2. 100 epochs batch 1000
+	Loss classified as loss 62630
+	Wins classified as wins 6402
+	Wins classified as loss 11007
+	Loss classified as wins 5024
+
+	Accuracy:        0.8115396823530795
+	Precision:       0.5603010677402416
+	Recall:          0.36774082371187317
+	F1 score:        0.4440436968961332
+	Mean abs error:  289.338152511252
+
+- All positions
+- Y as classification
+
+	1. 25 epochs batch 5000
+	Loss classified as loss 57937
+	Wins classified as wins 9042
+	Wins classified as loss 8367
+	Loss classified as wins 9717
+
+	Accuracy:        0.7874046295098927
+	Precision:       0.4820086358547897
+	Recall:          0.5193865242116147
+	F1 score:        0.5
+	Mean abs error:  0.2232177697843859
+
+	2. 25 epochs batch 5000
+	Loss classified as loss 59494
+	Wins classified as wins 8173
+	Wins classified as loss 9236
+	Loss classified as wins 8160
+
+	Accuracy:        0.7954927524305515
+	Precision:       0.5003979673054552
+	Recall:          0.4694698144637831
+	F1 score:        0.4844407563274257
+	Mean abs error:  0.21432329911092132
+
+- Position > 2
+- Y as classification
+
+	Loss classified as loss 21404
+	Wins classified as wins 2352
+	Wins classified as loss 2743
+	Loss classified as wins 2088
+
+	Accuracy:        0.8310071011298842
+	Precision:       0.5297297297297298
+	Recall:          0.4616290480863592
+	F1 score:        0.4933403251179864
+	Mean abs error:  0.17032511051682306
+
+- Position > 3
+- Y as classification
+
+	1. 25 epochs batch 5000
+	Loss classified as loss 10104
+	Wins classified as wins 1575
+	Wins classified as loss 847
+	Loss classified as wins 1432
+
+	Accuracy:        0.8367244590915603
+	Precision:       0.5237778516794147
+	Recall:          0.6502890173410405
+	F1 score:        0.5802173512617426
+	Mean abs error:  0.16204962949538596
+
+	2. 25 epochs batch 5000
+	Loss classified as loss 10359
+	Wins classified as wins 1381
+	Wins classified as loss 1041
+	Loss classified as wins 1177
+
+	Accuracy:        0.8410947127095573
+	Precision:       0.5398749022673964
+	Recall:          0.5701899256812551
+	F1 score:        0.5546184738955824
+	Mean abs error:  0.16022531033558815
+
+	3. 50 epochs batch 1000
+	Loss classified as loss 10490
+	Wins classified as wins 1271
+	Wins classified as loss 1151
+	Loss classified as wins 1046
+
+	Accuracy:        0.8425992262501791
+	Precision:       0.5485541648683643
+	Recall:          0.5247729149463254
+	F1 score:        0.5364000844059928
+	Mean abs error:  0.15789530531697682
+
+	4. 25 epochs batch 1000
+	Loss classified as loss 10555
+	Wins classified as wins 1268
+	Wins classified as loss 1154
+	Loss classified as wins 981
+
+	Accuracy:        0.8470411233701103
+	Precision:       0.5638061360604714
+	Recall:          0.523534269199009
+	F1 score:        0.5429244273174909
+	Mean abs error:  0.1535983437171792
+
+- Position > 3
+- Y as regression
+
+	1. 50 epochs batch 1000
+	Loss classified as loss 10426
+	Wins classified as wins 1388
+	Wins classified as loss 1034
+	Loss classified as wins 1110
+
+	Accuracy:        0.8463963318527009
+	Precision:       0.55564451561249
+	Recall:          0.5730800990916598
+	F1 score:        0.5642276422764227
+	Mean abs error:  274.32608308132484
+
+
+- Position == 3
+- Y as classification
+
+	Loss classified as loss 11260
+	Wins classified as wins 1012
+	Wins classified as loss 1657
+	Loss classified as wins 700
+
+	Accuracy:        0.838881673388475
+	Precision:       0.5911214953271028
+	Recall:          0.3791682278006744
+	F1 score:        0.46199497831545305
+	Mean abs error:  0.17851202174775238
+
+- Position == 0
+- Y as classification
+
+	1. 25 epochs batch 5000
+	Loss classified as loss 14499
+	Wins classified as wins 2183
+	Wins classified as loss 3192
+	Loss classified as wins 2825
+
+	Accuracy:        0.7349222432706287
+	Precision:       0.4359025559105431
+	Recall:          0.40613953488372095
+	F1 score:        0.4204950399691804
+	Mean abs error:  0.2850198900346185
+
+	2. 50 epochs batch 1000
+	Loss classified as loss 14510
+	Wins classified as wins 2222
+	Wins classified as loss 3153
+	Loss classified as wins 2814
+
+	Accuracy:        0.7371249834794484
+	Precision:       0.44122319301032564
+	Recall:          0.4133953488372093
+	F1 score:        0.4268562097781193
+	Mean abs error:  0.26467938492559867
+
+
+- All positions
+- Y as regression
+
+- Position > 2
+- Y as regression

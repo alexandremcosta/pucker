@@ -8,6 +8,8 @@
 # stack for losers.
 
 require_relative 'players'
+require_relative 'bn_players'
+require_relative 'nn_players'
 require 'forwardable'
 
 module Pucker
@@ -21,11 +23,11 @@ module Pucker
       @amount = amount.is_a?(Integer) ? amount : STACK
       # @container = Array.new(@count-1) { player_source.new(@amount) }
       @container = []
-      @container << DummyPlayer.new(@amount)
-      @container << SimpleBnPlayer.new(@amount)
+      @container << BnPlayer.new(@amount)
       @container << BnPlayer.new(@amount)
       @container << BestBnPlayer.new(@amount)
       @container << BestBnPlayer.new(@amount)
+      @container << NnPlayer.new(@amount)
     end
 
     def set_hands(dealer)

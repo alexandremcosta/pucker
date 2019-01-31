@@ -1,0 +1,25 @@
+# RIVER
+
+def fit_model(Xtrain, ytrain):
+    model = Sequential()
+
+    model.add(Dense(input_dim=Xtrain.shape[1], units=1000, activation='relu', kernel_initializer='random_normal'))
+    model.add(Dense(units=1000, activation='relu', kernel_initializer='random_normal'))
+    model.add(Dense(units=1000, activation='relu', kernel_initializer='random_normal'))
+    model.add(Dense(units=1000, activation='relu', kernel_initializer='random_normal'))
+    model.add(Dense(units=1000, activation='tanh', kernel_initializer='glorot_normal'))
+    model.add(Dense(units=1000, activation='tanh', kernel_initializer='glorot_normal'))
+    model.add(Dense(units=1, activation='linear', kernel_initializer='random_normal'))
+
+    model.compile(optimizer='adam', loss='mean_absolute_error', metrics=['mae'])
+    model.fit(Xtrain, ytrain, batch_size=2000, epochs=200)
+    
+    return model
+
+Accuracy:        0.7352478925560795
+Precision:       0.6928223844282239
+Recall:          0.7298942646587632
+F1 score:        0.7108753315649866
+Mean abs error:  827.0613044357748
+
+=====================

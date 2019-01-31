@@ -36,6 +36,19 @@ module Pucker
       return state
     end
 
+    def predict_params
+      discard = case table_cards.size
+      when 3
+        %w(turn_rank turn_suit river_rank river_suit)
+      when 4
+        %w(river_rank river_suit)
+      else
+        %w(ppot npot)
+      end
+      discard += %w(reward player id)
+      attributes.reject{|k, _| discard.include?(k.to_s)}
+    end
+
     def set_raises(pot)
       initialize_raises
 

@@ -8,6 +8,8 @@ class CreateStates < ActiveRecord::Migration
       t.integer :total_pot,      null: false
       t.integer :hand_rank,      null: false
       t.decimal :hand_strength,  null: false
+      t.decimal :ppot,           null: false
+      t.decimal :npot,           null: false
       t.integer :card1_rank,     null: false
       t.integer :card1_suit,     null: false
       t.integer :card2_rank,     null: false

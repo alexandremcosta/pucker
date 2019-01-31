@@ -1,0 +1,15 @@
+Number of rebuys: player - number
+BnPlayer1 - 21
+BnPlayer2 - 37
+BestBnPlayer3 - 48
+BestBnPlayer4 - 41
+Number of games with stack over 2000: player - number
+NnPlayer5 - 5000
+BestBnPlayer3 - 2088
+BestBnPlayer4 - 1886
+BnPlayer2 - 2412
+BnPlayer1 - 3511
+Number of games being table king: player - number
+NnPlayer5 - 4994
+BestBnPlayer4 - 5
+BestBnPlayer3 - 1

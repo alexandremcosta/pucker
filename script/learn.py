@@ -1,4 +1,6 @@
-# Get Data
+from pucker_utils import neural_network, ScalerEncoder
+
+# Get data
 import sqlite3
 import pandas as pd
 
@@ -10,94 +12,25 @@ df = df.loc[:, 'total_players':'reward'] # Remove ID
 df_flop = df[df.turn_rank.isnull() & df.river_rank.isnull()]
 df_flop = df_flop.drop(['turn_rank', 'turn_suit', 'river_rank', 'river_suit'], axis=1)
 
-Xflop = df_flop.loc[:, 'total_players':'decision_raise']
-yflop = df_flop.loc[:, 'reward']
-yflop = pd.DataFrame([1 if item > 0 else 0 for item in yflop])
-
 df_turn = df[df.turn_rank.notnull() & df.river_rank.isnull()]
 df_turn = df_turn.drop(['river_rank', 'river_suit'], axis=1)
 
-Xturn = df_turn.loc[:, 'total_players':'decision_raise']
-yturn = df_turn.loc[:, 'reward']
-
 df_river = df[df.turn_rank.notnull() & df.river_rank.notnull()]
+df_river = df_river.drop(['ppot', 'npot'], axis=1) # river hand has no potential to improve
 
-Xriver = df_river.loc[:, 'total_players':'decision_raise']
-yriver = df_river.loc[:, 'reward']
+def split_XY(dataframe):
+    X = dataframe.loc[:, 'total_players':'decision_raise']
+    y = dataframe.loc[:, 'reward']
+    
+    return(X, y.values)
     
     
-# Encode and scale
-from sklearn.preprocessing import OneHotEncoder, StandardScaler
-from sklearn.compose import make_column_transformer
-
-def remove_multiple(collection, unwanted):
-    collection = list(collection)
-    unwanted = list(unwanted)
-    return [item for item in collection if item not in unwanted]
-
-def process(data):
-    encode_columns = [item for item in data.columns if 'suit' in item]
-    scale_columns = remove_multiple(data.columns, encode_columns)
-
-    column_transformer = make_column_transformer(
-        (StandardScaler(), scale_columns),
-        (OneHotEncoder(categories='auto'), encode_columns))
-
-    return column_transformer.fit_transform(data)
+def number_of_features(Xdata):
+    encode_columns = [item for item in Xdata.columns if 'suit' in item]
+    return Xdata.shape[1] + len(encode_columns)*4 - len(encode_columns)
     
     
-# Build and fit neural networks
-from keras.models import Sequential
-from keras.layers import Dense
-
-def neural_network(nfeatures):
-    model = Sequential()
-
-    model.add(Dense(input_dim=nfeatures, units=1000, activation='relu', kernel_initializer='random_normal'))
-    model.add(Dense(units=1000, activation='relu', kernel_initializer='random_normal'))
-    model.add(Dense(units=1000, activation='relu', kernel_initializer='random_normal'))
-    model.add(Dense(units=1000, activation='relu', kernel_initializer='random_normal'))
-    model.add(Dense(units=1000, activation='relu', kernel_initializer='random_normal'))
-    model.add(Dense(units=1000, activation='relu', kernel_initializer='random_normal'))
-    model.add(Dense(units=1000, activation='tanh', kernel_initializer='glorot_normal'))
-    model.add(Dense(units=1000, activation='tanh', kernel_initializer='glorot_normal'))
-    model.add(Dense(units=1, activation='linear', kernel_initializer='random_normal'))
-
-    model.compile(optimizer='adam', loss='mae', metrics=['mae'])
-
-    return model
-
-def flop_model(Xtrain, ytrain):
-    model = Sequential()
-    
-    model.add(Dense(input_dim=Xtrain.shape[1], units=1000, activation='relu', kernel_initializer='random_normal'))
-    model.add(Dense(units=1000, activation='relu', kernel_initializer='random_normal'))
-    model.add(Dense(units=1000, activation='relu', kernel_initializer='random_normal'))
-    model.add(Dense(units=1000, activation='relu', kernel_initializer='random_normal'))
-    model.add(Dense(units=1000, activation='relu', kernel_initializer='random_normal'))
-    model.add(Dense(units=1000, activation='relu', kernel_initializer='random_normal'))
-    model.add(Dense(units=1000, activation='tanh', kernel_initializer='glorot_normal'))
-    model.add(Dense(units=1000, activation='tanh', kernel_initializer='glorot_normal'))
-    model.add(Dense(units=1, activation='sigmoid', kernel_initializer='random_normal'))
-
-    model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy', 'mae'])
-  
-    model.fit(Xtrain, ytrain, batch_size=5000, epochs=25)
-    
-    return model
-    
-    
-# Run
-from sklearn.model_selection import train_test_split
-
-def predict(fit_model, X, y):
-    Xtrain, Xtest, ytrain, ytest = train_test_split(X, y, test_size=0.2, random_state=0)  
-    model = fit_model(Xtrain, ytrain)
-    ypred = model.predict(Xtest)
-    return (ytest, ypred)
-    
-    
-# Metrics
+# Evaluation
 from sklearn.metrics import confusion_matrix, accuracy_score, precision_score, recall_score, f1_score, mean_absolute_error
 
 def evaluate(ytest, ypred):
@@ -115,16 +48,59 @@ def evaluate(ytest, ypred):
     print('Precision:\t', precision_score(true_result, pred_result))
     print('Recall: \t', recall_score(true_result, pred_result))
     print('F1 score:\t', f1_score(true_result, pred_result))
-    print('Mean abs error: ', mean_absolute_error(ytest, ypred))    
+    print('Mean absolute error:\t', mean_absolute_error(ytest, ypred))
 
 
-# Main
-# df_flop = df_flop[df_flop.position_over_all > 2]
-# Xflop = df_flop.loc[:, 'total_players':'decision_raise']
-# yflop = df_flop.loc[:, 'reward']
+# Run and evaluate
+from sklearn.model_selection import train_test_split
+from sklearn.pipeline import Pipeline
+from keras.wrappers.scikit_learn import KerasRegressor
+import numpy
 
-X = process(Xflop)
-y = yflop.values
+seed = 7 # fix random seed for reproducibility
+numpy.random.seed(seed)
 
-ytest, ypred = predict(flop_model, X, y)
-evaluate(ytest, ypred)
+def run_and_evaluate(dataframe):
+    X, y = split_XY(dataframe)
+    
+    pipeline = Pipeline([
+        ('preprocess', ScalerEncoder()),
+        ('model', KerasRegressor(build_fn=neural_network, input_dim=number_of_features(X), epochs=25, batch_size=1000, verbose=1))])
+        
+    Xtrain, Xtest, ytrain, ytest = train_test_split(X, y, test_size=0.2, random_state=0)  
+    pipeline.fit(Xtrain, ytrain)
+    ypred = pipeline.predict(Xtest)
+
+    evaluate(ytest, ypred)
+
+def run_and_evaluate_all():
+    print('FLOP:')
+    run_and_evaluate(df_flop)
+    print('TURN:')
+    run_and_evaluate(df_turn)
+    print('RIVER:')
+    run_and_evaluate(df_river)
+
+
+# Train full dataset and persist
+import joblib
+
+def train_persist(dataframe, filename):
+    X, y = split_XY(dataframe)
+
+    pipeline = Pipeline([
+        ('preprocess', ScalerEncoder()),
+        ('model', KerasRegressor(build_fn=neural_network, input_dim=number_of_features(X), epochs=25, batch_size=1000, verbose=1))])
+    
+    pipeline.fit(X, y)
+    joblib.dump(pipeline, filename)
+
+train_persist(df_flop, 'flop.joblib')
+train_persist(df_turn, 'turn.joblib')
+train_persist(df_river, 'river.joblib')
+
+# json samples
+# import json
+# xflop, yflop = split_XY(df_flop)
+# parsed = json.loads(xflop.loc[0:1, :].to_json(orient = 'records'))
+# print(json.dumps(parsed, indent=4))
