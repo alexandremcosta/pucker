@@ -1,5 +1,6 @@
 source 'https://rubygems.org'
 
+gem 'gruff'
 gem 'rspec'
 gem 'ruby-debug'
 gem 'sbn', '0.9.1'

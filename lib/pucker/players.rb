@@ -45,7 +45,7 @@ module Pucker
     end
 
     def bet(state)
-      get_from_stack(state.min_bet)
+      raise 'This is an abstract class. Override this method to create a player.'
     end
 
     def active?
@@ -113,8 +113,9 @@ module Pucker
       @allin = true
     end
 
-    def stocastic_raise(min_bet, chance)
+    def stocastic_raise(min_bet)
       random_choice = rand
+      chance = rand(0.8..0.9)
 
       if random_choice < chance
         raise_from(min_bet)
@@ -123,8 +124,9 @@ module Pucker
       end
     end
 
-    def stocastic_check(min_bet, chance)
+    def stocastic_check(min_bet)
       random_choice = rand
+      chance = rand(0.8..0.9)
 
       if random_choice < chance
         get_from_stack(min_bet)
@@ -135,8 +137,9 @@ module Pucker
 
     def stocastic_fold(min_bet)
       random_choice = rand
+      chance = (min_bet <= 2*BIG_BLIND) ? 0.8 : 0.9
 
-      if random_choice < 0.9
+      if random_choice < chance
         fold
       else
         get_from_stack(min_bet)
@@ -146,9 +149,9 @@ module Pucker
     def raise_from(min_bet)
       min_bet = BIG_BLIND if min_bet == 0
 
-      if stack > (4 * min_bet)
-        raise_factor = [2, 3, 4].sample
-        get_from_stack(raise_factor * min_bet)
+      if stack > (8 * BIG_BLIND) && stack > (4 * min_bet)
+        amount = (rand(2.0..3.0) * min_bet).round
+        get_from_stack(amount)
       else # ALLIN
         get_from_stack(stack)
       end

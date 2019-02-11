@@ -16,18 +16,17 @@ module Pucker
   class PlayerGroup
     include Enumerable
     extend Forwardable
-    def_delegators :@container, :each, :map, :[], :rotate, :rotate!, :size, :last, :first, :index
+    def_delegators :@container, :each, :map, :[], :rotate, :rotate!, :size, :last, :first, :index, :sum
 
-    def initialize(count=NUM_PLAYERS, amount=STACK)
-      @count = count.is_a?(Integer) ? count : NUM_PLAYERS
+    def initialize(amount=STACK)
       @amount = amount.is_a?(Integer) ? amount : STACK
-      # @container = Array.new(@count-1) { player_source.new(@amount) }
-      @container = []
-      @container << BnPlayer.new(@amount)
-      @container << BnPlayer.new(@amount)
-      @container << BestBnPlayer.new(@amount)
-      @container << BestBnPlayer.new(@amount)
-      @container << NnPlayer.new(@amount)
+      @container = [
+        NnPlayer350.new(@amount),
+        NnPlayer1000.new(@amount),
+        NnPlayer175.new(@amount),
+        NnPlayer700.new(@amount),
+        NnPlayer1000.new(@amount)
+      ].shuffle
     end
 
     def set_hands(dealer)
@@ -46,6 +45,7 @@ module Pucker
 
     def reset
       @container.each do |p|
+        STATISTIC.add_bankroll(p)
         if p.stack <= 0
           p.stack = @amount
           LOG.info("#{p.id} lost")
@@ -61,11 +61,6 @@ module Pucker
 
     def persist_states
       @container.each(&:persist_and_clear_states)
-    end
-
-    private
-    def player_source
-      [SimpleBnPlayer, SimpleBnPlayer, BnPlayer, BnPlayer, Player].sample
     end
   end
 end

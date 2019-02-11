@@ -1,0 +1,35 @@
+FLOP:
+Loss classified as loss 63727
+Wins classified as wins 6107
+Wins classified as loss 9591
+Loss classified as wins 1906
+
+Accuracy:        0.8586393871955343
+Precision:       0.7621365281417696
+Recall:          0.3890304497388202
+F1 score:        0.5151195647589727
+Mean absolute error:     127.46620781523002
+
+TURN:
+Loss classified as loss 11019
+Wins classified as wins 5614
+Wins classified as loss 3048
+Loss classified as wins 1758
+
+Accuracy:        0.7758290965063669
+Precision:       0.7615301139446554
+Recall:          0.6481182175017317
+F1 score:        0.7002619433703381
+Mean absolute error:     411.26690579337014
+
+RIVER:
+Loss classified as loss 4895
+Wins classified as wins 3262
+Wins classified as loss 1623
+Loss classified as wins 799
+
+Accuracy:        0.7710558653937045
+Precision:       0.8032504309283428
+Recall:          0.6677584442169908
+F1 score:        0.7292644757433491
+Mean absolute error:     582.2627683825772

@@ -1,1 +1,0 @@
-NOLOG=true jruby -J-Xmn1024m -J-Xms4096m -J-Xmx4096m -J-server ./script/run_multiple_rounds.rb

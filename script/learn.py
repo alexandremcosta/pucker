@@ -1,10 +1,10 @@
-from pucker_utils import neural_network, ScalerEncoder
+from pucker_utils import neural_network_1000_6, neural_network_700_6, neural_network_350_12, neural_network_175_24, ScalerEncoder
 
 # Get data
 import sqlite3
 import pandas as pd
 
-conn = sqlite3.connect('../db/pucker.sqlite3')
+conn = sqlite3.connect('../db/pucker_phase2.sqlite3')
 
 df = pd.read_sql_query("SELECT * FROM states", conn)
 df = df.loc[:, 'total_players':'reward'] # Remove ID
@@ -55,49 +55,65 @@ def evaluate(ytest, ypred):
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
 from keras.wrappers.scikit_learn import KerasRegressor
+from keras.callbacks import EarlyStopping
 import numpy
 
 seed = 7 # fix random seed for reproducibility
 numpy.random.seed(seed)
 
-def run_and_evaluate(dataframe):
+def run_and_evaluate(dataframe, model):
     X, y = split_XY(dataframe)
+    Xtrain, Xtest, ytrain, ytest = train_test_split(X, y, test_size=0.2, random_state=0)
+    
+    early_stop = EarlyStopping(monitor='val_loss', patience=5, verbose=1, restore_best_weights=True)
     
     pipeline = Pipeline([
         ('preprocess', ScalerEncoder()),
-        ('model', KerasRegressor(build_fn=neural_network, input_dim=number_of_features(X), epochs=25, batch_size=1000, verbose=1))])
-        
-    Xtrain, Xtest, ytrain, ytest = train_test_split(X, y, test_size=0.2, random_state=0)  
+        ('model', KerasRegressor(build_fn=model, input_dim=number_of_features(X), epochs=100, batch_size=1000, verbose=1, callbacks=[early_stop], validation_split=0.1))])
+    
     pipeline.fit(Xtrain, ytrain)
     ypred = pipeline.predict(Xtest)
 
     evaluate(ytest, ypred)
 
-def run_and_evaluate_all():
+def run_and_evaluate_all(model):
     print('FLOP:')
-    run_and_evaluate(df_flop)
+    run_and_evaluate(df_flop, model)
     print('TURN:')
-    run_and_evaluate(df_turn)
+    run_and_evaluate(df_turn, model)
     print('RIVER:')
-    run_and_evaluate(df_river)
+    run_and_evaluate(df_river, model)
 
+# run_and_evaluate_all(neural_network_175_24)
 
 # Train full dataset and persist
 import joblib
 
-def train_persist(dataframe, filename):
+def train_persist(dataframe, model, filename):
     X, y = split_XY(dataframe)
 
     pipeline = Pipeline([
         ('preprocess', ScalerEncoder()),
-        ('model', KerasRegressor(build_fn=neural_network, input_dim=number_of_features(X), epochs=25, batch_size=1000, verbose=1))])
+        ('model', KerasRegressor(build_fn=model, input_dim=number_of_features(X), epochs=20, batch_size=1000, verbose=1))])
     
     pipeline.fit(X, y)
     joblib.dump(pipeline, filename)
 
-train_persist(df_flop, 'flop.joblib')
-train_persist(df_turn, 'turn.joblib')
-train_persist(df_river, 'river.joblib')
+train_persist(df_flop, neural_network_1000_6, 'flop_1000_6.joblib')
+train_persist(df_turn, neural_network_1000_6, 'turn_1000_6.joblib')
+train_persist(df_river, neural_network_1000_6, 'river_1000_6.joblib')
+
+train_persist(df_flop, neural_network_700_6, 'flop_700_6.joblib')
+train_persist(df_turn, neural_network_700_6, 'turn_700_6.joblib')
+train_persist(df_river, neural_network_700_6, 'river_700_6.joblib')
+
+train_persist(df_flop, neural_network_350_12, 'flop_350_12.joblib')
+train_persist(df_turn, neural_network_350_12, 'turn_350_12.joblib')
+train_persist(df_river, neural_network_350_12, 'river_350_12.joblib')
+
+train_persist(df_flop, neural_network_175_24, 'flop_175_24.joblib')
+train_persist(df_turn, neural_network_175_24, 'turn_175_24.joblib')
+train_persist(df_river, neural_network_175_24, 'river_175_24.joblib')
 
 # json samples
 # import json

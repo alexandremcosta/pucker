@@ -15,8 +15,8 @@ module Pucker
   class Game
     attr_reader :players
 
-    def initialize(count=NUM_PLAYERS, amount=STACK)
-      @players = PlayerGroup.new(count, amount)
+    def initialize
+      @players = PlayerGroup.new
     end
 
     def play
@@ -53,7 +53,6 @@ module Pucker
       LOG.info("PLAYERS: #{winners.flatten.map{|p| [p.id, "[#{p.stack}]", p.hand.toString.strip].join(' ')}.join('  |  ')}")
       reward winners
       LOG.info("GAME STATE: #{players.map{|p| "#{p.id}: #{p.stack}"}.join('  |  ')}\n")
-      register_statistic
       rotate_and_reset_states
       return true
     end
@@ -87,25 +86,37 @@ module Pucker
     end
 
     def collect_bets
+      old_bets = 0
       max_bet = 0
+      has_allin = false
       last_player = previous_player = players.last
       round_pot = Pot.new(players.size)
 
       players.cycle do |player|
-        break if !players.has_multiple_active?
+        break if !players.has_multiple_active? && !has_allin
 
 
         if player.active?
           state = new_state(players.eligible.count, players.eligible.index(player), player_position(player), max_bet, player.hand, main_pot.merge(round_pot), player.id)
 
           if player_bet = player.bet_and_store(state)
-            if player_bet > max_bet #RAISED
+            if player.allin? && (player_bet + round_pot.total_contributed_by(player_position(player))) > max_bet
+              max_bet = player_bet + round_pot.total_contributed_by(player_position(player))
+              last_player = previous_player
+            elsif player_bet > max_bet #RAISED
               max_bet = player_bet
               last_player = previous_player
             end
 
-            old_bets = round_pot.total_contributed_by(player_position(player))
-            player.reward(old_bets)
+            if player.allin?
+              LOG.debug("\t\t\t\t\t----------------------> ALLIN!")
+              has_allin = true
+              old_bets = 0
+            else
+              old_bets = round_pot.total_contributed_by(player_position(player))
+              player.reward(old_bets)
+            end
+
             LOG.debug("PLAYER: #{player} - BET: #{player_bet - old_bets}")
             round_pot.add_bet(player_position(player), round, player_bet - old_bets)
           else
@@ -145,13 +156,6 @@ module Pucker
           return if main_pot.empty?
         end
       end
-    end
-
-    def register_statistic
-      players.each do |p|
-        STATISTIC.increase_high_stack(p) if p.stack > STACK
-      end
-      STATISTIC.increase_table_king(players.get_table_king)
     end
 
     def round
