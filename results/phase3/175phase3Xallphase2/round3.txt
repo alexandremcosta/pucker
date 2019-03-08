@@ -1,0 +1,8 @@
+Phase3 round3
+Mili big blinds won per game:
+player:	number
+NnPlayer10002:	-582
+NnPlayer10005:	-412
+NnPlayer1753:	894
+NnPlayer3501:	15
+NnPlayer7004:	82

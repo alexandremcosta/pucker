@@ -1,0 +1,119 @@
+\begin{thebibliography}{10} \addcontentsline{toc}{chapter}{\bibname}
+  \arial\markboth{\bibname}{\bibname}
+
+\bibitem[Ampatzoglou2007]{Ampatzoglou2007}
+\MakeUppercase{Ampatzoglou, A.; Chatzigeorgiou, A.\/}.
+\newblock {\bf Evaluation of object-oriented design patterns in game
+  development}.
+\newblock Information and Software Technology, 49:445--454, 05 2007.
+
+\bibitem[Billings1998]{Billings1998}
+\MakeUppercase{Billings, D., P. D. S.~J.; Szafron, D.\/}.
+\newblock {\bf {Poker as a Testbed for Machine Intelligence Research}}.
+\newblock In: PROCEEDINGS OF THE 12TH BIENNIAL CONFERENCE OF THE CANADIAN
+  SOCIETY FOR COMPUTATIONAL STUDIES OF INTELLIGENCE ON ADVANCES IN ARTIFICIAL
+  INTELLIGENCE, p. 228--238, june 1998.
+
+\bibitem[Billings2016]{Billings2016}
+\MakeUppercase{D.~Billings, D.~Papp, J.~S.; Szafron, D.\/}.
+\newblock {\bf {Opponent modeling in poker}}.
+\newblock In AAAI National Conference, 1998.
+
+\bibitem[Bowling2008]{Bowling2008}
+\MakeUppercase{M.~Bowling, N.~Burch, M.~J.; Tammelin, O.\/}.
+\newblock {\bf {Heads-up limit hold’em poker is solved}}.
+\newblock In: SCIENCE, 347 (6218), 2015.
+
+\bibitem[Bronowski1973]{Bronowski1973}
+\MakeUppercase{Bronowski, J.\/}.
+\newblock {\bf {The ascent of man, Documentary Episode 13.}}, 1973.
+
+\bibitem[Brown2015]{Brown2015}
+\MakeUppercase{N.~Brown, T.~S.\/}.
+\newblock {\bf {Claudico: The World's Strongest No-Limit Texas Hold'em Poker
+  AI}}.
+\newblock In: IN PROCEEDINGS OF THE NEURAL INFORMATION PROCESSING SYSTEMS:
+  NATURAL AND SYNTHETIC (NIPS) CONFERENCE, DEMONSTRATION TRACK, 2015.
+
+\bibitem[Brown2017]{Brown2017}
+\MakeUppercase{N.~Brown, T.~S.\/}.
+\newblock {\bf {Libratus:The superhuman ai for no-limit poker}}.
+\newblock In: IN PROCEEDINGS OF THE TWENTY-SIXTH INTERNATIONAL JOINT CONFERENCE
+  ON ARTIFICIAL INTELLIGENCE, IJCAI-17, 5226–5228, 2017.
+
+\bibitem[Davidson2000]{Davidson2000}
+\MakeUppercase{A.~Davidson, D.~Billings, J. S. D.~S.\/}.
+\newblock {\bf {Improved opponent modeling in poker}}.
+\newblock In: PROCEEDINGS OF THE INTERNATIONAL CONFERENCE ON ARTIFICIAL
+  INTELLIGENCE (IC-AI'2000), LAS VEGAS, NV, 2000.
+
+\bibitem[Johanson2013]{Johanson2013}
+\MakeUppercase{Johanson, M.\/}.
+\newblock {\bf {Measuring the size of large no-limit poker games}}.
+\newblock Technical Report TR13-01, Department of Computing Science, University
+  of Alberta, march 2013.
+
+\bibitem[Kocsis2006]{Kocsis2006}
+\MakeUppercase{L.~Kocsis, C.~S.\/}.
+\newblock {\bf {Bandit Based Monte-Carlo Planning}}.
+\newblock In: PROCEEDINGS OF THE SEVENTEENTH EUROPEAN CONFERENCE ON MACHINE
+  LEARNING, 4212, p. 282--293. Springer-Verlag Berlin Heidelberg, 2006.
+
+\bibitem[Moravcik2017]{Moravcik2017}
+\MakeUppercase{M.~Moravcik, M.~Schmid., B. N. L. V. M. D. B. N. D. T. W. K.
+  J.-h.~M.; Bowling, M.\/}.
+\newblock {\bf {Deepstack: Expert-level artificial intelligence in heads-up
+  no-limit poker}}.
+\newblock In: SCIENCE 356, p. 508--513, 2017.
+
+\bibitem[Rubin2009]{Rubin2009}
+\MakeUppercase{J.~Rubin, I.~W.\/}.
+\newblock {\bf {SARTRE: System Overview, A Case-Based Agent for Two-Player
+  Texas Hold’em}}.
+\newblock In: WORKSHOP ON CASE-BASED REASONING FOR COMPUTER GAMES, EIGHTH
+  INTERNATIONAL CONFERENCE ON CASE-BASED REASONING (ICCBR 2009). Springer,
+  Heidelberg, 2009.
+
+\bibitem[Silver2016]{Silver2016}
+\MakeUppercase{J.~Heinrich, D.~S.\/}.
+\newblock {\bf {Deep reinforcement learning from self-play in
+  imperfect-information games}}.
+\newblock NIPS Deep Reinforcement Learning Workshop, 2016.
+
+\bibitem[Sirin2008]{Sirin2008}
+\MakeUppercase{V.~Sirin, A.~P.\/}.
+\newblock {\bf {A machine learning approach to the poker playing problem}}.
+\newblock 2008.
+
+\bibitem[Tammelin2015]{Tammelin2015}
+\MakeUppercase{O.~Tammelin, N.~Burch, M.~J.; Bowling, M.\/}.
+\newblock {\bf {Heads-up limit hold’em poker is solved}}.
+\newblock In: SCIENCE VOLUME 347, p. 145--149, january 2015.
+
+\bibitem[Zikenvich2008]{Zikenvich2008}
+\MakeUppercase{M.~Zinkevich, M.~Johanson, M.~B.; Piccione, C.\/}.
+\newblock {\bf {Regret minimization in games with incomplete information}}.
+\newblock In: NEURAL INFORMATION PROCESSING SYSTEMS, VOLUME 21, 2008.
+
+\bibitem[jruby.org]{jruby.org}
+{\bf The ruby programming language on the jvm}.
+\newblock \url{https://www.jruby.org}.
+\newblock Accessed: 2019-01-15.
+
+\bibitem[python.org]{python.org}
+{\bf Python is a programming language that lets you work quickly and integrate
+  systems more effectively.}
+\newblock \url{https://www.python.org/}.
+\newblock Accessed: 2019-01-15.
+
+\bibitem[spaz.ca/poker/doc]{spaz.ca/poker/doc}
+{\bf Package ca.ualberta.cs.poker}.
+\newblock \url{http://spaz.ca/poker/doc}.
+\newblock Accessed: 2019-01-15.
+
+\bibitem[sqlite.org]{sqlite.org}
+{\bf What is sqlite?}
+\newblock \url{https://www.sqlite.org/index.html}.
+\newblock Accessed: 2019-01-15.
+
+\end{thebibliography}

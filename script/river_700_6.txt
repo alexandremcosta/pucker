@@ -1,0 +1,10 @@
+Loss classified as loss 16191
+Wins classified as wins 8008
+Wins classified as loss 2032
+Loss classified as wins 2100
+
+Accuracy:	 0.8541526949278175
+Precision:	 0.7922437673130194
+Recall: 	 0.797609561752988
+F1 score:	 0.7949176096883065
+Mean absolute error:	 109.71414243168047

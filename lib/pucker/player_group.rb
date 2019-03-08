@@ -10,6 +10,7 @@
 require_relative 'players'
 require_relative 'bn_players'
 require_relative 'nn_players'
+require_relative 'rl_players'
 require 'forwardable'
 
 module Pucker
@@ -21,12 +22,13 @@ module Pucker
     def initialize(amount=STACK)
       @amount = amount.is_a?(Integer) ? amount : STACK
       @container = [
-        NnPlayer350.new(@amount),
-        NnPlayer1000.new(@amount),
-        NnPlayer175.new(@amount),
+        RlPlayer.new(@amount),
         NnPlayer700.new(@amount),
-        NnPlayer1000.new(@amount)
-      ].shuffle
+        NnPlayer700.new(@amount),
+        NnPlayer700.new(@amount),
+        NnPlayer700.new(@amount)
+      ]
+      @container.shuffle
     end
 
     def set_hands(dealer)

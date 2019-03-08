@@ -1,0 +1,133 @@
+%%% -*- coding: utf-8 -*-
+\newpage
+
+\chapter{Architecture}
+\label{chap:architecture}
+
+The Pucker framework has 4 components: a no limit Texas Hold’em simulation written in JRuby~\cite{jruby.org}, a SQLite storage~\cite{sqlite.org}, a learning and a prediction script written in Python programming language~\cite{python.org}.
+
+The simulation runs the game, inserting data about the states seen by a player and his rewards (or punishments if negative) in the database. The states and rewards are the learning variables. The learning script reads the database, fits the model, and stores the model parameters in disk. The prediction script loads the model and exposes predictions through a http API. The simulation queries the prediction API when a machine learning player needs to take a decision.
+
+\vspace{1cm}
+\includegraphics[scale=2]{architecture}
+
+\section{Simulation}
+\label{sec:simulation}
+
+The Ruby programming language was chosen to write the simulation component. Ruby offers a great syntax to write game simulations because it is idiomatic, succinct, and object-oriented.
+
+The game of poker, as many other games, is composed of independent reusable components that answer to messages, such as player, dealer and a deck of cards. According to Ampatzoglou and Chatzigeorgiou~\cite{Ampatzoglou2007}, games demand great flexibility, code reusability and low maintenance costs. Consequently, the application of design patterns in them can be beneficial. Ruby is heavily object-oriented and allowed fast development of the simulation.
+
+Due to its idiomacy, the main method of the simulation, the \textit{play} method on the \textit{Game} class, can be understood by anyone. It seems like an english description of the poker game:
+
+%% def play
+%%   setup_game
+%%   collect_blinds
+%%
+%%   # FLOP
+%%   3.times do deal_table_card end
+%%   main_pot.merge!(collect_bets)
+%%
+%%   # TURN
+%%   deal_table_card
+%%   main_pot.merge!(collect_bets)
+%%
+%%   # RIVER
+%%   deal_table_card
+%%   main_pot.merge!(collect_bets)
+%%
+%%   winners = eligible_players_by_rank
+%%   reward winners
+%%
+%%   rotate_and_reset_states
+%% end
+
+A simple random player can be written in few lines of ruby:
+
+%% class DummyPlayer < Player
+%%   def bet(state)
+%%     min_bet = state.min_bet
+%%
+%%     choice = rand
+%%
+%%     if min_bet > 0 && choice < 1/3.0 # FOLD
+%%       fold
+%%     elsif choice < 2/3.0 # CHECK
+%%       get_from_stack(min_bet)
+%%     else # RAISE
+%%       raise_from(min_bet)
+%%     end
+%%   end
+%% end
+
+Through the past years, many reusable poker components were written by the Computer Poker Research Group, at the University of Alberta ~\cite{spaz.ca/poker/doc}. Those components were written in the Java programming language. To reuse those components, we chose the JRuby platform to run the poker simulation. This platform runs the Ruby syntax on the Java Virtual Machine~\cite{jruby.org}, and simplifies the calling of Java poker components from Ruby simulation code.
+
+In the context of the Pucker framework, a game has a group of players, a dealer and a pot with the bets of the current game. The dealer deal cards. Players evaluate game state and choose an action based on their current state.
+
+\vspace{1cm}
+\includegraphics[scale=2]{simulation-diagram}
+
+As previously said (see~\ref{sec:foundations}), Texas Hold'em poker variant has 4 phases: pre-flop, flop, turn and river.
+
+In pre-flop, a player have to take an action with little information about its opponents, since few bets have been committed to the pot. Given that, a good pre-flop strategy is easier to achieve than in other game phases. According to~\cite{someone}, a great pre-flop strategy can be achieved by looking only to private cards. Due to its simplicity, this research have abstracted the pre-flop phase: every player bets the same as the big-blind player (see~\ref{sec:positions}).
+
+\section{Storage}
+\label{sec:storage}
+
+In real poker, there are many game variables, such as how much time a player delayed to take a decision, history of opponent’s decisions, cards on the table, cards in player’s private hand, how strong is the combination of table and hand cards, player position, and many others.
+
+In Pucker, we consider a state as composed by:
+\begin{itemize}
+  \item Count of players
+  \item Count of active players in this round (players who have not folded)
+  \item Player's position
+  \item Amount in the pot
+  \item Amount each player has bet
+  \item Number of raises per player
+  \item Self amount committed to the pot
+  \item Self number of raises
+  \item Hand cards
+  \item Table cards
+  \item Combination of Hand and Table ranking
+  \item Combination of Hand and Table strength
+  \item Combination of Hand and Table potential
+  \item Action taken
+\end{itemize}
+
+The reward (or punishment if negative) a player has received in the end of a round is also part of the state. This is the dependent variable our models are trying to predict. Pucker is an extensible framework, it is easy to add or remove variables to the state in future work.
+
+In poker, a player sees a game state, takes an action, and receives a reward (or punishment) in the end of the round. Pucker players remember the states, actions and rewards, and stores them in a SQLite database, one row per action taken.
+
+This is a complex game. To learn a fine strategy, a machine learning player must be fitted from a very large dataset. To accomplish that, the simulation needs to be fast and can't be stopped every round by a slow operation such as database inserts. To overcome this problem, a batch of states are written at once in a single insert query.
+
+\section{Learning}
+\label{sec:Learning}
+
+A machine learning prediction typically maps a set of variables to an output. In this work, the input will be the poker state and the output will be the reward seen in the end of this state. In short, the machine learning algorithm will learn to predict the reward, given a state and an action.
+
+To choose the right action, a machine learning player will predict the reward of different actions (fold, call, raise), and choose an action that maximises its rewards. This is inspired in Reinforcement Learning, but without policy optimization~\cite{Silver2016}.
+
+Since the number of states in no limit Texas Hold’em is $10^{160}$~\cite{Johanson2013}, it is impossible to store every state. It is even hard to store the number of states to take a good decision. To overcome this, we will store only the model parameters and erase the database of states after the learning process.
+
+It is crucial for the model to be extensible: it may correct its parameters according to new data, it will not be able to access the full history. Neural Networks are capable of incremental learning, and this is a big reason of their choice in favor of other models, like Gradient Boosting Machines~\cite{something}.
+
+Instead of considering the game round (pre-flop, flop, turn or river) a variable of the state, past work~\cite{Sirin2008} has seen better results by creating a separate model for each round, and we will also consider that. TODO: consider what sirin has written.
+
+The learning component is a Python script that reads states from a database, preprocess, fits a prediction model and stores its parameters in disk.
+
+\section{Prediction}
+\label{sec:prediction}
+
+The prediction component is trivial. It reads the stored model parameters and creates an instance of the model.
+
+There are two problems: this is a slow process, and the Ruby simulation cannot run Python code seamleesly, they are different languages running in different virtual machines. To overcome those problems, the prediction component keeps an instance of the model in memory and exposes a http API that receives a state and returns a prediction.
+
+This component is capable of exposing many different models, one per http endpoint. This way, Pucker supports the simulation of many different machine learning algorithms playing at the same time.
+
+To build the http API, Pucker uses the Flask library~\cite{flask}.
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: thesis.tex
+%%% End:

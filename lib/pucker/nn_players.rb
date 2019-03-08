@@ -4,11 +4,7 @@ require 'manticore'
 module Pucker
   class NnPlayer < Player
     def bet(state)
-      decisions = {
-        raise: predict_raise(state),
-        check: predict_check(state),
-        fold: predict_fold(state)
-      }
+      decisions = predict_decisions(state)
 
       decision = decisions.key(decisions.values.max)
       decision = :fold if decisions.values.all? { |val| val < 0 }
@@ -31,6 +27,12 @@ module Pucker
     end
 
     private
+    def predict_decisions(state)
+      { raise: predict_raise(state),
+        check: predict_check(state),
+        fold: predict_fold(state) }
+    end
+
     def predict_fold(state)
       predict(state) do |s|
         s.decision_fold = 1
@@ -40,7 +42,6 @@ module Pucker
     def predict_check(state)
       predict(state) do |s|
         s.decision_check = state.min_bet
-        s.decision_check = 1 if state.min_bet == 0
       end
     end
 
@@ -53,7 +54,7 @@ module Pucker
     def predict(state)
       reset_decision(state)
       yield(state)
-      prediction = request(state.predict_params)
+      prediction = request([state.predict_params])
 
       return prediction.to_i
     end
@@ -77,7 +78,7 @@ module Pucker
       raise 'this method should be overriden and return an endpoint'
     end
 
-    def port; 8081 end
+    def port; 8082 end
   end
 
   class NnPlayer1000 < NnPlayer

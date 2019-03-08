@@ -6,7 +6,7 @@ module Pucker
   class State < ActiveRecord::Base
     include InsertMultiple
 
-    attr_reader :table_cards
+    attr_accessor :table_cards
 
     def self.create_multiple(collection)
       return if collection.empty?
@@ -36,13 +36,20 @@ module Pucker
       return state
     end
 
+    def flop?
+      table_cards.size == 3
+    end
+
+    def turn?
+      table_cards.size == 4
+    end
+
     def predict_params
-      discard = case table_cards.size
-      when 3
+      discard = if flop?
         %w(turn_rank turn_suit river_rank river_suit)
-      when 4
+      elsif turn?
         %w(river_rank river_suit)
-      else
+      else # river
         %w(ppot npot)
       end
       discard += %w(reward player id)

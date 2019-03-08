@@ -6,8 +6,8 @@
 require_relative '../lib/pucker'
 
 # TODO: script parameters
-phase = 2
-round = 12 
+phase = 3
+round = 3
 # Pucker::State.delete_all
 
 g = Pucker::Game.new
@@ -20,7 +20,7 @@ n_games = 0
 
 10.times do |n|
   10.times do |m|
-    50.times { g.play; n_games += 1 }
+    30.times { g.play; n_games += 1 }
     # g.play; n_games += 1
 
     progress = 10*n + m + 1

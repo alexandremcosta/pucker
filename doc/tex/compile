@@ -1,0 +1,5 @@
+pdftex -fmt pdflatex thesis.tex
+bibtex thesis
+pdftex -fmt pdflatex thesis.tex
+pdftex -fmt pdflatex thesis.tex
+xdg-open thesis.pdf

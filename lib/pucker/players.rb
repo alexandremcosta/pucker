@@ -114,7 +114,7 @@ module Pucker
     end
 
     def stocastic_raise(min_bet)
-      random_choice = rand
+      random_choice = 0 # rand
       chance = rand(0.8..0.9)
 
       if random_choice < chance
@@ -125,7 +125,7 @@ module Pucker
     end
 
     def stocastic_check(min_bet)
-      random_choice = rand
+      random_choice = 0 # rand
       chance = rand(0.8..0.9)
 
       if random_choice < chance
@@ -136,7 +136,7 @@ module Pucker
     end
 
     def stocastic_fold(min_bet)
-      random_choice = rand
+      random_choice = 0 # rand
       chance = (min_bet <= 2*BIG_BLIND) ? 0.8 : 0.9
 
       if random_choice < chance

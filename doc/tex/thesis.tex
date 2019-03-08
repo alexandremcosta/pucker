@@ -1,0 +1,165 @@
+%% -*- coding: utf-8; -*-
+
+\documentclass[master,american]{ThesisPUC}
+
+%---------- Math ----------%
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{mathtools}
+\usepackage{bbm}
+%---------- Floting ----------%
+\usepackage{float}
+% ---------- References ----------%
+%\usepackage[sort&compress,round,comma,numbers]{natbib}
+%\usepackage{natbib}
+%---------- Algorithm ----------%
+\usepackage[algosection, algoruled]{algorithm2e}
+%---------- Tables ----------%
+\usepackage{multicol}
+\usepackage{booktabs}
+%---------- TiKz ----------%
+\usepackage{threeparttable}
+\usepackage{standalone}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usepackage{psfrag,epsf}
+\usepackage{todonotes}
+\usepackage{multirow}
+
+\graphicspath{{images/}}
+
+% ---------- Cover ----------%
+% Adjust the advisor's title according to gender(Prof. or Prof$^{\text{a}}$.)
+\author{Alexandre Marangoni Costa}
+\authorR{Costa, Alexandre Marangoni}
+\advisor{Marcus Vinicius Soledade Poggi de Aragão}{Prof.}
+\advisorR{Poggi de Aragão, Marcus V.S.}
+%\coadvisor{Simone Diniz Junqueira Barbosa}{Prof$^{\text{a}}$.}
+%\coadvisorR{Barbosa, Simone Diniz Junqueira}
+
+% This thesis will use colored figures, this goes in the catalographic sheet
+\usecolour{true}
+\title{Visão teórica e prática sobre a aplicação de Deep Learning na construção de agentes de pôquer}
+\titleuk{Deep learning overview and application to build poker playing agents}
+
+\day{26$^{th}$}
+\month{February}
+\myyear{2019}
+
+% CDD is the registry number of the area, given by the library. Our area (informatics) is 004.
+\city{Rio de Janeiro}
+\CDD{004}
+\department{Informática}
+\program{Informática}
+\school{Centro Técnico Científico}
+\university{Pontifícia Universidade Católica do Rio de Janeiro}
+\uni{PUC-Rio}
+
+%---------- Jury ----------%
+
+% Internal jury members are declared with \jurymember{name}{title}{department}{university}
+% external jury members are declared with \extjurymember{name}{title}{university}
+\jury{
+  \jurymember{Hélio Côrtes Vieira Lopes}{Prof.}{Departamento de Informática}{PUC-Rio}
+  \jurymember{Thibaut Vidal}{Prof.}{Departamento de Informática}{PUC-Rio}
+  \jurymember{Bruno Feijó}{Prof.}{Departamento de Informática}{PUC-Rio}
+  % The person below is mandatory.
+  \schoolhead{Márcio da Silveira Carvalho}{Prof.}
+}
+
+%---------- Front letters ----------%
+\resume
+{
+Bachelor's in Computer Engineer (2013) at the Pontifícia Universidade Católica do Rio de Janeiro (PUC-Rio). Joined the Master Program in Informatics at the Pontifical Catholic University of Rio de Janeiro (PUC-Rio) in 2017.
+}
+
+\acknowledgment
+{
+  \noindent
+  
+  To FAPERJ and CAPES, for financing this research.
+  
+  To Marcus Poggi, who is an advisor but also a close friend.
+  
+  To my family, for unconditional love.
+  
+  To my friends, who turn life into a beautiful journey.
+  
+  To Alan Turing, for making computation a reality.
+  
+  To God, for making everything a reality.
+}
+
+
+% Workaround for keywords. The keywords in the catalographic sheet must be separated by dots, while the ones shown in the abstract must be separated by semi-colons.
+% Thats why we have two commands for each language: \keywords declares the keywords for the catalographic sheet, while \keywordsabstract declares the ones for the abstract.
+\keywords
+{
+  \key{Deep Learning}
+  \key{Redes Neurais}
+  \key{Aprendizado de Máquina}
+  \key{Pôquer}
+  \key{Simulação Multiagente}
+}
+
+\keywordsabstract
+{
+  \key{Deep Learning;}
+  \key{Redes Neurais;}
+  \key{Aprendizado de Máquina;}
+  \key{Pôquer;}
+  \key{Simulação Multiagente;}
+}
+
+\keywordsuk
+{
+  \key{Deep Learning}
+  \key{Neural Network}
+  \key{Machine Learning}
+  \key{Poker}
+  \key{Multi-Agent Simulation}
+}
+
+\keywordsabstractuk
+{
+  \key{Deep Learning;}
+  \key{Neural Network;}
+  \key{Machine Learning;}
+  \key{Poker;}
+  \key{Multi-Agent Simulation;}
+}
+
+\abstract{
+  A ciência de dados precisa de uma grande quantidade de dados para testar e melhorar soluções. Jogos são largamente usados para abstrair situações da vida real. Rodadas de pôquer são um bom exemplo pois, por não saber as cartas dos oponentes, o jogador analisa um cenário de informação incompleta numa competição de agentes que envolve conhecimento probabilístico, análise de risco e brefe. Isso o diferencia de xadrez, damas e jogos de conhecimento perfeito e algoritmos de busca em forca bruta sobre o espaço de soluções. Usar o pôquer como um caso de teste possibilita a análise de diferentes abordagens usadas na vida real, porém num cenário mais controlado. Esta dissertação propõe um arcabouço de funcionalidades para criar e testar diferentes algorítimos de Deep Learning, que podem jogar pôquer entre sí, aprender com o histórico e maximizar suas recompensas.
+}
+
+\abstractuk{
+  Data science research needs real examples to test and improve solutions. Games are widely used to mimic those real-world examples. Poker rounds are a good example of imperfect information state with competing agents dealing with probabilistic knowledge, risk assessment, and possible deception, unlike chess, checkers and perfect information brute-force search style of games. By using poker as a test-bed we can analyze different approaches used in real-world examples, in a more controlled environment, which should give great insights on how to tackle those real-world scenarios. We propose a framework to build and test different neural networks that can play against each other, learn from a supervised experience and maximize its rewards.
+}
+
+\epigraph{"Hard" is everything you still don't know}
+\epigraphauthor{Hamazaki, Geiza}
+
+% WARNING
+% The epigraph, if present, must come before the first chapter, always.
+% There is a list of abreviations (abrevs.tex) which is included automatically in the ThesisPUC.cls, and is optional, comment the \include{abrevs} line if you do not wish to included it.
+\begin{document}
+
+\input{Introduction.tex}
+\input{Background.tex}
+\input{Learning.tex}
+\input{Architecture.tex}
+\input{Evaluation.tex}
+\input{Conclusions.tex}
+
+The remainder of this thesis is organized as follows: Chapter~\ref{chap:related-work} presents the state-of-the-art in Artificial Intelligent poker agents. Next, in Chapter~\ref{chap:background} we describe poker foundations and explain computer poker features that can help convergence of neural networks in early poker stages. Chapter~\ref{chap:learning} shows how neural networks work to gradually improve its predictions and how we used reinforcement learning to adapt the model to multi-step games. Chapter~\ref{chap:architecture} describes the project architecture, simulation, data storage, learn and predict modules. Chapter~\ref{chap:evaluation} presents details about the experiments and the associated results. Chapter~\ref{chap:conclusions} presents some concluding remarks and directions for future work.
+
+\arial
+\bibliography{references}
+
+% Apendix chapters below.
+%\normalfont
+%\appendix
+%\input{appendix.tex}
+
+\end{document}

@@ -5,6 +5,7 @@ from flask import Flask, request, jsonify
 import joblib
 import pandas as pd
 import tensorflow as tf
+import pdb
 
 # Run with 1/2 GPU memory cap
 # One server predicts for 2 clients
@@ -20,8 +21,14 @@ def predict(pipeline, df):
     return jsonify(result.tolist())
 
 def request_to_dataframe(request):
-    data = request.form.to_dict()
-    df = pd.DataFrame([data])
+    # data = request.form.to_dict()
+    # df = pd.DataFrame([data])
+
+    df_aux = pd.DataFrame(request.form.lists())
+    df = pd.DataFrame(columns=df_aux[0].values)
+    for (column_name, column_data) in request.form.lists():
+        df[column_name] = column_data
+
     return df.astype('float64')
 
 @app.route('/pred_1000', methods=['POST'])
