@@ -14,18 +14,21 @@
 \BOOKMARK [1][]{section.2.2}{Related Work}{chapter.2}% 14
 \BOOKMARK [0][]{chapter.3}{Learning}{}% 15
 \BOOKMARK [1][]{section.3.1}{Deep Learning}{chapter.3}% 16
-\BOOKMARK [1][]{section.3.2}{Reinforcement Learning}{chapter.3}% 17
-\BOOKMARK [1][]{section.3.3}{Pucker Learning}{chapter.3}% 18
-\BOOKMARK [0][]{chapter.4}{Architecture}{}% 19
-\BOOKMARK [1][]{section.4.1}{Simulation}{chapter.4}% 20
-\BOOKMARK [1][]{section.4.2}{Storage}{chapter.4}% 21
-\BOOKMARK [1][]{section.4.3}{Learning}{chapter.4}% 22
-\BOOKMARK [1][]{section.4.4}{Prediction}{chapter.4}% 23
-\BOOKMARK [0][]{chapter.5}{Evaluation}{}% 24
-\BOOKMARK [1][]{section.5.1}{Model metrics}{chapter.5}% 25
-\BOOKMARK [1][]{section.5.2}{Poker statistics}{chapter.5}% 26
-\BOOKMARK [0][]{chapter.6}{Conclusions}{}% 27
-\BOOKMARK [1][]{section.6.1}{Publications}{chapter.6}% 28
-\BOOKMARK [1][]{section.6.2}{Contributions}{chapter.6}% 29
-\BOOKMARK [1][]{section.6.3}{Future Work}{chapter.6}% 30
-\BOOKMARK [0][]{chapter*.2}{Bibliography}{}% 31
+\BOOKMARK [2][]{subsection.3.1.1}{The perceptron}{section.3.1}% 17
+\BOOKMARK [2][]{subsection.3.1.2}{Activation Functions}{section.3.1}% 18
+\BOOKMARK [1][]{section.3.2}{Reinforcement Learning}{chapter.3}% 19
+\BOOKMARK [0][]{chapter.4}{Architecture}{}% 20
+\BOOKMARK [1][]{section.4.1}{Simulation}{chapter.4}% 21
+\BOOKMARK [1][]{section.4.2}{Storage}{chapter.4}% 22
+\BOOKMARK [1][]{section.4.3}{Learning}{chapter.4}% 23
+\BOOKMARK [2][]{subsection.4.3.1}{Neural Networks Architectures}{section.4.3}% 24
+\BOOKMARK [2][]{subsection.4.3.2}{Bayesian Networks and Initial Dataset}{section.4.3}% 25
+\BOOKMARK [1][]{section.4.4}{Prediction}{chapter.4}% 26
+\BOOKMARK [0][]{chapter.5}{Evaluation}{}% 27
+\BOOKMARK [1][]{section.5.1}{Model metrics}{chapter.5}% 28
+\BOOKMARK [1][]{section.5.2}{Poker statistics}{chapter.5}% 29
+\BOOKMARK [0][]{chapter.6}{Conclusions}{}% 30
+\BOOKMARK [1][]{section.6.1}{Publications}{chapter.6}% 31
+\BOOKMARK [1][]{section.6.2}{Contributions}{chapter.6}% 32
+\BOOKMARK [1][]{section.6.3}{Future Work}{chapter.6}% 33
+\BOOKMARK [0][]{chapter*.6}{Bibliography}{}% 34

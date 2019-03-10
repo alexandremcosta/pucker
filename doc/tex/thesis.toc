@@ -15,18 +15,21 @@
 \contentsline {section}{\numberline {2.2}Related Work}{19}{section.2.2}% 
 \contentsline {chapter}{\numberline {3}Learning}{21}{chapter.3}% 
 \contentsline {section}{\numberline {3.1}Deep Learning}{21}{section.3.1}% 
-\contentsline {section}{\numberline {3.2}Reinforcement Learning}{21}{section.3.2}% 
-\contentsline {section}{\numberline {3.3}Pucker Learning}{21}{section.3.3}% 
-\contentsline {chapter}{\numberline {4}Architecture}{22}{chapter.4}% 
-\contentsline {section}{\numberline {4.1}Simulation}{22}{section.4.1}% 
-\contentsline {section}{\numberline {4.2}Storage}{24}{section.4.2}% 
-\contentsline {section}{\numberline {4.3}Learning}{25}{section.4.3}% 
-\contentsline {section}{\numberline {4.4}Prediction}{25}{section.4.4}% 
-\contentsline {chapter}{\numberline {5}Evaluation}{26}{chapter.5}% 
-\contentsline {section}{\numberline {5.1}Model metrics}{26}{section.5.1}% 
-\contentsline {section}{\numberline {5.2}Poker statistics}{26}{section.5.2}% 
-\contentsline {chapter}{\numberline {6}Conclusions}{27}{chapter.6}% 
-\contentsline {section}{\numberline {6.1}Publications}{27}{section.6.1}% 
-\contentsline {section}{\numberline {6.2}Contributions}{28}{section.6.2}% 
-\contentsline {section}{\numberline {6.3}Future Work}{28}{section.6.3}% 
-\contentsline {chapter}{Bibliography}{29}{chapter*.2}% 
+\contentsline {subsection}{\numberline {3.1.1}The perceptron}{21}{subsection.3.1.1}% 
+\contentsline {subsection}{\numberline {3.1.2}Activation Functions}{22}{subsection.3.1.2}% 
+\contentsline {section}{\numberline {3.2}Reinforcement Learning}{23}{section.3.2}% 
+\contentsline {chapter}{\numberline {4}Architecture}{24}{chapter.4}% 
+\contentsline {section}{\numberline {4.1}Simulation}{24}{section.4.1}% 
+\contentsline {section}{\numberline {4.2}Storage}{26}{section.4.2}% 
+\contentsline {section}{\numberline {4.3}Learning}{27}{section.4.3}% 
+\contentsline {subsection}{\numberline {4.3.1}Neural Networks Architectures}{28}{subsection.4.3.1}% 
+\contentsline {subsection}{\numberline {4.3.2}Bayesian Networks and Initial Dataset}{28}{subsection.4.3.2}% 
+\contentsline {section}{\numberline {4.4}Prediction}{31}{section.4.4}% 
+\contentsline {chapter}{\numberline {5}Evaluation}{32}{chapter.5}% 
+\contentsline {section}{\numberline {5.1}Model metrics}{32}{section.5.1}% 
+\contentsline {section}{\numberline {5.2}Poker statistics}{32}{section.5.2}% 
+\contentsline {chapter}{\numberline {6}Conclusions}{33}{chapter.6}% 
+\contentsline {section}{\numberline {6.1}Publications}{33}{section.6.1}% 
+\contentsline {section}{\numberline {6.2}Contributions}{34}{section.6.2}% 
+\contentsline {section}{\numberline {6.3}Future Work}{34}{section.6.3}% 
+\contentsline {chapter}{Bibliography}{35}{chapter*.6}% 
